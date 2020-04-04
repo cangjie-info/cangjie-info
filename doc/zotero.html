@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>zotero</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+</head>
+<body>
+<h1 id="zotero">Zotero</h1>
+<h2 id="get-zotero-item-key-from-firefox">Get Zotero item key from Firefox</h2>
+<p>To read an item via the Zotero API, you need to have the item key. Oddly, the Zotero Firefox app does not provide simple access to the item keys. The following export translator will copy the item keys as a comma-separated list to the clipboard on Ctrl+Shift+c in the usual manner. The translator needs to be saved as a javascript file (.js file extension) in the Zotero translators directory.</p>
+<pre><code>{
+&quot;translatorID&quot;:&quot;064ef4ee-61b8-4bb4-ba16-5501d09aed0c&quot;,
+&quot;translatorType&quot;:2,
+&quot;label&quot;:&quot;Item key&quot;,
+&quot;creator&quot;:&quot;Sebastian Karcher&quot;,
+&quot;target&quot;:&quot;html&quot;,
+&quot;minVersion&quot;:&quot;2.0&quot;,
+&quot;maxVersion&quot;:&quot;&quot;,
+&quot;priority&quot;:200,
+&quot;inRepository&quot;:false,
+&quot;lastUpdated&quot;:&quot;2012-07-17 22:27:00&quot;
+}
+
+function doExport() {
+        var item;
+        while(item = Zotero.nextItem()) {Zotero.write(item.key + &quot;\n&quot;);}
+}</code></pre>
+<h2 id="insert-coins-data-into-a-web-page">Insert COinS data into a web-page</h2>
+<p>Set Zotero Quick Copy default output format to “COinS”. Copy COinS data for one or more items to clipboard using Ctrl+Shift+c in the usual manner. The COinS data should result in a clickable citation link in the Firefox URL window. Click to import to Zotero.</p>
+<p>This procedure currently has one obvious shortcoming for single-field Chinese-style author names. A single author name gets duplicated as both rft.aulast and rft.au. On import, the author appears twice. Try importing from this page, and inspecting the COinS source, and you will see what I mean. Deleting one of the duplicates is easy, but it is annoying. Writing an alternative COinS export translator would be one solution.</p>
+<h2 id="insert-zotero-bibliographic-data-into-a-web-page-by-querying-the-zotero-api">Insert Zotero bibliographic data into a web-page by querying the Zotero API</h2>
+<p>Log into your Zotero account at www.zotero.org. Settings &gt; Feeds/API. Copy the value given by “Your userID for use in API calls is …”. Construct an API query URL that gives you the bibliographic data you need in the format you want it.</p>
+<p>The URL starts with <code>https://api.zotero.org/users/&lt;userid&gt;/</code>.</p>
+<p>For a single bibliographic item, add <code>items/&lt;itemkey&gt;</code>. To discover the item key, see the HowTo on this page.</p>
+<h3 id="item-example">Item example:</h3>
+<pre><code>https://api.zotero.org/users/160881/items/8HTNV32W/?v=3&amp;format=bib&amp;style=elsevier-harvard2.</code></pre>
+<p>Here 160881 is my user id. 8HTNV32W is the item id in my Zotero database. v=3 selects the most recent API version number (i.e. ver. 3). <code>format=bib</code> requests that the data be formatted as an XHTML bibliography. <code>style=elsevier-harvard2</code> sets the citation style. I like elsevier-harvard2 because 1/ it doesn’t pointlessly capitalize all title words, and 2/ it doesn’t italicize Chinese (or any) titles. See the result returned by this <a href="https://api.zotero.org/users/160881/items/8HTNV32W/?v=3&amp;format=bib&amp;style=elsevier-harvard2">URL</a> here.</p>
+<h3 id="multiple-item-example">Multiple item example:</h3>
+<pre><code>https://api.zotero.org/users/160881/items/?v=3&amp;format=bib&amp;style=elsevier-harvard2&amp;itemKey=UDAKWEPD,6MPC3NRH,BETZ6T8M,2A44Q48D,9KDGT7VK,24MN76X3,IFITWC8S,5JKVSN7X,DSF26IDM,2W76QV2C,983IUQW6,5IBA73W6</code></pre>
+<p>Notice that the item keys are now a comma-separated list in the query string. Result is <a href="https://api.zotero.org/users/160881/items/?v=3&amp;format=bib&amp;style=elsevier-harvard2&amp;itemKey=UDAKWEPD,6MPC3NRH,BETZ6T8M,2A44Q48D,9KDGT7VK,24MN76X3,IFITWC8S,5JKVSN7X,DSF26IDM,2W76QV2C,983IUQW6,5IBA73W6">here</a>.</p>
+<h3 id="tag-example">Tag example:</h3>
+<p>To return a bibliography of all items with a particular tag use tag= in the query string. E.g.</p>
+<pre><code>https://api.zotero.org/users/160881/items/?v=3&amp;format=bib&amp;style=elsevier-harvard2&amp;tag=OBI</code></pre>
+<p>Result is <a href="https://api.zotero.org/users/160881/items/?v=3&amp;format=bib&amp;style=elsevier-harvard2&amp;tag=OBI">here</a>.</p>
+<h3 id="coins">COinS:</h3>
+<p>By changing the <code>format=bib</code> to <code>format=coins</code>, a set of <code>&lt;span&gt;</code>s containing COinS data is returned instead.</p>
+<pre><code>https://api.zotero.org/users/160881/items/?v=3&amp;format=coins&amp;tag=OBI.</code></pre>
+<p>Adding the bibliograpic data to a php/html webpage is simple:</p>
+<pre><code>&lt;?php 
+$url = &#39;https://api.zotero.org/users/160881/items/?v=3&amp;format=coins&amp;tag=OBI&#39;; 
+$var = file_get_contents($url); 
+echo $var; 
+?&gt;</code></pre>
+</body>
+</html>
