@@ -1,17 +1,15 @@
 <?php
 
-require('../../credentials.php');
+require('/var/www/html/cangjie.info/credentials.php');
 
 try {
 	$db = new PDO($dsn, $username, $password);
 }
 catch(PDOException $e) {
 	$error_message = $e->getMessage();
-	include('db_error.php');
+	include('../includes/db_error.php');
 	exit();
 }
-
-echo "Success";
 
 ?>
 
