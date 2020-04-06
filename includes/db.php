@@ -1,6 +1,6 @@
 <?php
 
-require('/var/www/html/cangjie.info/credentials.php');
+require('../../credentials.php');
 
 try {
 	$db = new PDO($dsn, $username, $password);
