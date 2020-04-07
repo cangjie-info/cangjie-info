@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>punctuation</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+</head>
+<body>
+<h1 id="punctuation">Punctuation</h1>
+<p>Puntuation is represeneted in the <code>inscr_graphs</code> table by the <code>punc</code> field, and in the inscr_graph.class.php class by the public member $punc.</p>
+<p>Punctuation represented in this way is editorial punctuation. It does not refer to marks or signs appearing in the original inscription. (They would be encoded as graphs inline with the text, not as markup.)</p>
+<p>Punctuation associated with a particular graph is represented using a single integer, the individual bits of which indicate the presence or absence of the possible punctuation characters. Punctuation comes in two flavors: pre-punctuation is punctuation that is inserted before the graph it is associated with in the stream of text. Post-punctuation refers to punctuation that is inserted after the graph with which it is associated. The list below shows the punctuation currently permitted by ECDB, with their corresponding bits. Currently, a two-byte integer is wide enough to accommodate all combinations of permitted punctuation, with one bit to spare.</p>
+<ul>
+<li>LEFTQUOTE = 1 = 2^0 “</li>
+<li>LEFTINNERQUOTE = 2 = 2^1 ‘</li>
+<li>LEFTTITLE = 4 = 2^2 《</li>
+<li>RIGHTTITLE = 8 = 2^3 》</li>
+<li>PERIOD = 16 = 2^4 。</li>
+<li>QUESTION = 32 = 2^5 ？</li>
+<li>EXCLAMATION = 64 = 2^6 ！</li>
+<li>LISTCOMMA = 128 = 2^7 、</li>
+<li>COMMA = 256 = 2^8 ，</li>
+<li>COLON = 512 = 2^9 ：</li>
+<li>RIGHTINNNERQUOTE = 1024 = 2^10 ’</li>
+<li>RIGHTQUOTE = 2048 = 2^11 ”</li>
+<li>TAB = 4096 = 2^12 (indent, for verse sections, etc.)</li>
+<li>NEWLINE = 8192 = 2^13 (start new line, for verse sections, paragraphs in long prose passages or speeches, etc.)</li>
+<li>SEMICOLON = 16384 = 2^14 ;</li>
+<li>PREPUNC = [NEWLINE, TAB, LEFTQUOTE, LEFTINNERQUOTE, LEFTTITLE]</li>
+<li>POSTPUNC = [RIGHTTITLE, PERIOD, QUESTION, EXCLAMATION, LISTCOMMA, COMMA, COLON, SEMICOLON, RIGHTINNERQUOTE, RIGHTQUOTE]</li>
+</ul>
+<p>When displaying text, the order of punctuation characters should follow their order within the PREPUNC and POSTPUNC lists. I.e. an EXCLAMATION always displays before a RIGHTINNERQUOTE, and a PERIOD always comes after a RIGHTTITLE but before a RIGHTQUOTE.</p>
+<p>The items in the following list are those which reliably indicate syntactic sentence divisions. This is useful for dividing a source text into sentence when importing to ECDB. Note that in the practice of many editors, COMMA often coincides with syntactic sentence divisions, but not reliably. This needs to be disambiguated subsequently.</p>
+<p>SENTENCEPUNC = [PERIOD, QUESTION, EXCLAMATION, COLON, SEMICOLON]</p>
+<p>Under this arrangment, quotes can be nested, but only to a depth of two.</p>
+</body>
+</html>
