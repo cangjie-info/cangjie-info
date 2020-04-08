@@ -30,11 +30,54 @@ class InscrGraph {
   public $number_sentence;
   public $graph;
 
+  public static function charToBit($char) {
+    //returns the bit value if $char matches one of the punctuation marks
+    if ($char == '“' or $char == '「') return self::LEFTQUOTE;
+    if ($char == '‘' or $char == '『') return self::LEFTINNERQUOTE;
+    if ($char == '《') return self::LEFTTITLE; 
+    if ($char == '》') return self::RIGHTTITLE;
+    if ($char == '.' or $char == '。') return self::PERIOD; 
+    if ($char == '?' or $char == '？') return self::QUESTION;
+    if ($char == '!' or $char == '！') return self::EXCLAMATION;
+    if ($char == '、') return self::LISTCOMMA;
+    if ($char == '，' or $char == ',') return self::COMMA; 
+    if ($char == ';' or $char == '；') return self::SEMICOLON;
+    if ($char == ':' or $char == '：') return self::COLON; 
+    if ($char == '’' or $char == '』') return self::RIGHTINNERQUOTE;
+    if ($char == '」' or $char == '”') return self::RIGHTQUOTE;
+    return 0;
+  }
+
+  public static function isPrepunc($mark) {
+    //return true if string $mark is a prepunc character
+  }
+
   public function toString() {
+    $prepunc = $this->getPrepuncString();
+    $postpunc = $this->getPostpuncString();
+    return $prepunc . $this->graph . $postpunc;
+  }
+
+  public function isSentenceFinal() {
+    //returns true if punctuation indicates the end of a sentence.
+    if ($this->punc & self::PERIOD or 
+      $this->punc & self::QUESTION or 
+      $this->punc & self::EXCLAMATION or 
+      $this->punc & self::COLON or 
+      $this->punc & self::SEMICOLON)
+      return true;
+    else return false;
+    }
+
+  private function getPrepuncString() {
     $prepunc = '';
     if ($this->punc &  self::LEFTQUOTE) {$prepunc .= '“';}
     if ($this->punc &  self::LEFTINNERQUOTE) {$prepunc .= '‘';}
     if ($this->punc &  self::LEFTTITLE) {$prepunc .= '《';}
+    return $prepunc;
+  }
+
+  private function getPostpuncString() {
     $postpunc = '';
     if ($this->punc &  self::RIGHTTITLE) {$postpunc .= '》';}
     if ($this->punc &  self::PERIOD) {$postpunc .= '。';}
@@ -46,6 +89,7 @@ class InscrGraph {
     if ($this->punc &  self::COLON) {$postpunc .= '：';}
     if ($this->punc &  self::RIGHTINNERQUOTE) {$postpunc .= '’';}
     if ($this->punc &  self::RIGHTQUOTE) {$postpunc .= '”';}
-    return $prepunc . $this->graph . $postpunc;
+    return $postpunc;
   }
 }
+
