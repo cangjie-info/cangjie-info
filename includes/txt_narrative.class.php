@@ -14,7 +14,7 @@ class TxtNarrative {
     $this->sentences[] = $sentence;
   }
 
-  public function getLength() {
+  public function getSentenceCount() {
     return count($this->sentences);
   }
 

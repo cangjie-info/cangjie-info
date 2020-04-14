@@ -4,13 +4,16 @@ require_once('../includes/all_php.php');
 require_once('../includes/db.php');
 require_once('../includes/txt_narrative.class.php');
 
-$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-
+$id = getFilteredId();
+  
 $qryNarrative = 'SELECT * FROM txt_narratives WHERE id=:id;';
 $stmtNarrative = $db->prepare($qryNarrative);
 $stmtNarrative->bindValue(':id', $id);
 $stmtNarrative->execute();
 $narrative = $stmtNarrative->fetchObject('TxtNarrative');
+if(!isset($narrative->id)) { // if no narrative corresponds to id
+  exit('invalid id');
+}
 $stmtNarrative->closeCursor();
 $qrySentences = 'SELECT txt_sentences.id, narrative_id, txt_sentences.number FROM txt_sentences ' .
   'INNER JOIN txt_narratives ON txt_sentences.narrative_id = txt_narratives.id ' .

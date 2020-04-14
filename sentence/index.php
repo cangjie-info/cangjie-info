@@ -4,13 +4,16 @@ require_once('../includes/all_php.php');
 require_once('../includes/txt_sentence.class.php');
 require_once('../includes/db.php');
 
-$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+$id = getFilteredId();
 
 $qrySentence = 'SELECT * FROM txt_sentences WHERE id=:id;';
 $stmtSentence = $db->prepare($qrySentence);
 $stmtSentence->bindValue(':id', $id);
 $stmtSentence->execute();
 $sentence = $stmtSentence->fetchObject('TxtSentence');
+if(!isset($sentence->id)) {
+  exit('invalid id');
+}
 
 $qryGraphs = 'SELECT inscr_id, number_inscr, markup, punc, sentence_id, number_sentence, graph ' .
   'FROM txt_sentences ' .
