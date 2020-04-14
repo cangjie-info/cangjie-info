@@ -8,5 +8,9 @@ for ($i = 0; $i < mb_strlen($string); $i++) {
   echo $char . ' ' . $graph->charToBit($char) . ' | ';
 }
 
+$string = '孟子見梁惠王';
+echo '\n' . $string . '\n';
+
+
 ?>
 
