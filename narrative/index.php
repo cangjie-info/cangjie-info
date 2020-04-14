@@ -35,6 +35,10 @@ while($sentence = $stmtSentences->fetchObject('TxtSentence')) {
   $narrative->appendSentence($sentence);
 }
 $stmtSentences->closeCursor();
+echo '<!DOCTYPE html>';
+echo ' <head>
+  <meta charset="UTF-8">
+</head> ';
 
 echo $narrative->toString();
 
