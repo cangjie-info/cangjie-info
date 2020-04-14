@@ -1,8 +1,5 @@
 <?php 
 
-require_once('../includes/all_php.php');
-require_once('../includes/db.php');
-
 class InscrGraph {
   const LEFTQUOTE = 1;
   const LEFTINNERQUOTE = 2;
@@ -50,16 +47,30 @@ class InscrGraph {
 
   public static function isPrepunc($mark) {
     //return true if string $mark is a prepunc character
+    if ($char == '“' or $char == '「' or $char == '‘' or $char == '『' or $char == '《') {
+      return true;
+    }
+    return false;
   }
 
-  public function toString() {
-    $prepunc = $this->getPrepuncString();
-    $postpunc = $this->getPostpuncString();
-    return $prepunc . $this->graph . $postpunc;
+  public static function isPostpunc($mark) {
+    if ($char == '》'
+      or $char == '。'
+      or $char == '?' or $char == '？'
+      or $char == '!' or $char == '！'
+      or $char == '、'
+      or $char == '，' or $char == ','
+      or $char == ';' or $char == '；'
+      or $char == ':' or $char == '：'
+      or $char == '’' or $char == '』'
+      or $char == '」' or $char == '”') {
+      return true;
+    }
+    return false;
   }
 
   public function isSentenceFinal() {
-    //returns true if punctuation indicates the end of a sentence.
+    //returns true if punctuation reliably indicates the end of a sentence.
     if ($this->punc & self::PERIOD or 
       $this->punc & self::QUESTION or 
       $this->punc & self::EXCLAMATION or 
@@ -68,6 +79,12 @@ class InscrGraph {
       return true;
     else return false;
     }
+
+  public function toString() {
+    $prepunc = $this->getPrepuncString();
+    $postpunc = $this->getPostpuncString();
+    return $prepunc . $this->graph . $postpunc;
+  }
 
   private function getPrepuncString() {
     $prepunc = '';
@@ -92,4 +109,3 @@ class InscrGraph {
     return $postpunc;
   }
 }
-

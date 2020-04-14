@@ -10,6 +10,5 @@ catch(PDOException $e) {
 	include('../includes/db_error.php');
 	exit();
 }
-
 ?>
 

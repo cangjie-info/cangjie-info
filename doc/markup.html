@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>markup</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+</head>
+<body>
+<h1 id="markup">Markup</h1>
+<p>This field stores a variety of markup for the graph in the form of bit-flags stored in a single integer value. This is hardly a human-readable format but it is compact and easily handled by client code: bitwise AND to read, OR to set, AND NOT to clear, and XOR to toggle, in the usual manner. The flags currently in use, and as named in an enum in the client code, are:</p>
+<ul>
+<li>NO_MARKUP = 0</li>
+<li>ALL_MARKUP = -1</li>
+<li>GRAPH_UNCERTAIN = 1: the graph’s identity has been determined, but the determination is uncertain.</li>
+<li>CRACK_NUMBER = 2: the graph is a crack-number on a divination bone.</li>
+<li>EDS_RESTORATION = 4: the graph is missing or illegible, but can be confidently restored on the basis of context.</li>
+<li>HEWEN_LEFT = 8: the first in a sequence of graphs that make up a hewen.</li>
+<li>HEWEN_RIGHT = 16: the second (or third, etc.) in a sequence of graphs that make up a hewen.</li>
+<li>FORM_UNUSUAL = 32: the identity of the graph is clear, but the form is unusual, non-standard, or in some way surprising. it may not resemble the form used in the font glyph. Graphs that are written upside-down in the context of right-way-up text should be marked up with this flag.</li>
+<li>CHONGWEN_LEFT = 64: the first occurrence of a graph in a repeition indicated by a chongwen symbol.</li>
+<li>CHONGWEN_RIGHT = 128: the second occurrence of a graph in repetition indicated by a chongwen symbol.</li>
+</ul>
+<p>It is almost certain that additional mark-up flags will be added in future.</p>
+</body>
+</html>
