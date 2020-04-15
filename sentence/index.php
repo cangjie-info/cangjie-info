@@ -28,7 +28,25 @@ while($graph = $stmtGraphs->fetchObject('InscrGraph')) {
 }
 $stmtGraphs->closeCursor();
 
-echo $sentence->toString();
-echo '<a href="../narrative/?id=' . $sentence->narrative_id . '" >LINK TO NARRATIVE</a>';
+// get next and previous setences in narrative
+$qryNextId = 'SELECT id FROM txt_sentences ' . 
+  'WHERE narrative_id=:narrative_id ' .
+  'AND number=:number+1;';
+$stmtNextId = $db->prepare($qryNextId);
+$stmtNextId->bindValue(':narrative_id', $sentence->narrative_id);
+$stmtNextId->bindValue(':number', $sentence->number);
+$stmtNextId->execute();
+$sentence->next_id = $stmtNextId->fetch()['id'];
+
+$qryPrevId = 'SELECT id FROM txt_sentences ' . 
+  'WHERE narrative_id=:narrative_id ' .
+  'AND number=:number-1;';
+$stmtPrevId = $db->prepare($qryPrevId);
+$stmtPrevId->bindValue(':narrative_id', $sentence->narrative_id);
+$stmtPrevId->bindValue(':number', $sentence->number);
+$stmtPrevId->execute();
+$sentence->prev_id = $stmtPrevId->fetch()['id'];
+
+require_once('sentence.html.php');
 
 ?>

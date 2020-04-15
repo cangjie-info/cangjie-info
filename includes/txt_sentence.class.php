@@ -6,7 +6,10 @@ class TxtSentence {
   public $id;
   public $narrative_id;
   public $number;
+  public $next_id; // next sentence in same narrative, false if none
+  public $prev_id; // prev sentence in same narrative, false if none
   public $graphs = array();
+
 
   public function appendGraph(InscrGraph $graph) {
     $this->graphs[] = $graph;
