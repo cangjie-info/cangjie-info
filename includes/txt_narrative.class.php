@@ -8,6 +8,8 @@ class TxtNarrative {
   public $name_en;
   public $name_zh;
   public $number;
+  public $next_id; // id of next narrative in subcollection
+  public $prev_id; // id of prev narrative
   public $sentences = array();
 
   public function appendSentence(TxtSentence $sentence) {
