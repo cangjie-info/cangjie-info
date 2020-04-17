@@ -12,11 +12,9 @@ $stmtCollection->bindValue(':id', $id);
 $stmtCollection->execute();
 $collection = $stmtCollection->fetchObject('TxtCollection');
 if(!isset($collection->id)) { // if no collection corresponds to that id ....
-  exit('invalid id');
+  exit('no collection for that id');
 }
 $stmtCollection->closeCursor();
-
-echo $collection->name_zh . ' ' . $collection->name_en;
 
 $qrySubcollections = 'SELECT id, name_en, name_zh ' .
   'FROM txt_subcollections ' .
@@ -27,8 +25,11 @@ $stmtSubcollections->bindValue(':id', $id);
 $stmtSubcollections->execute();
 while($subcollection = $stmtSubcollections->fetchObject('TxtSubcollection')) {
   $collection->appendSubcollection($subcollection);
-  echo "\n$subcollection->name_zh";
 }
+
+require_once('../includes/all_html_top.html.php');
+require_once('collection.html.php');
+require_once('../includes/all_html_bottom.html.php');
 
 ?>
 

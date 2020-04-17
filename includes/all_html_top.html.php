@@ -6,6 +6,6 @@
   </head>
   <body>
     <nav>
-      <a href="../home/">HOME</a>|<a href="../search/">SEARCH</a>
+      <a href="../home/">HOME</a> | <a href="../search/">SEARCH</a>
     </nav>
     <hr>

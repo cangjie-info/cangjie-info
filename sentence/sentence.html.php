@@ -1,7 +1,7 @@
 <?php if(!$sentence->prev_id === false) : ?>
-  <a href="./?id=<?php echo $sentence->prev_id; ?>">PREVIOUS SENTENCE</a>
+  <a href="./?id=<?php echo $sentence->prev_id; ?>">PREVIOUS SENTENCE</a> | 
 <?php endif; ?>
-<a href="../narrative/?id=<?php echo $sentence->narrative_id; ?>">UP TO NARRATIVE</a>
+<a href="../narrative/?id=<?php echo $sentence->narrative_id; ?>">UP TO NARRATIVE</a> | 
 <?php if(!$sentence->next_id === false) : ?>
 <a href="./?id=<?php echo $sentence->next_id; ?>">NEXT SENTENCE</a>
 <?php endif; ?>

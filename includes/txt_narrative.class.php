@@ -36,5 +36,3 @@ class TxtNarrative {
     return $str;
   }
 }
-
-
