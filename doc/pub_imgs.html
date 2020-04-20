@@ -16,7 +16,11 @@
 <h1 id="publication-images">PUBLICATION IMAGES</h1>
 <p>Every publication should be stored as jpeg images. Each publication has a <em>short name</em> (lower-case, alphanumeric plus _). The publication is represented by a single row in the table <code>pubs</code>.</p>
 <p>Use <a href="https://manpages.debian.org/testing/poppler-utils/pdftoppm.1.en.html">pdftoppm</a> to extract PDFs to jpeg or png. E.g. …</p>
-<p><code>pdftoppm -jpeg -r 300 jingmen_1998_guodian.pdf gd</code> <code>pdftoppm -jpeg -jpegopt quality=100 -r 300 machengyuan_2001_shanghai.pdf sb1</code></p>
+<p><code>pdftoppm -jpeg -r 300 jingmen_1998_guodian.pdf gd</code></p>
+<p><code>pdftoppm -jpeg -jpegopt quality=100 -r 300 machengyuan_2001_shanghai.pdf sb1</code></p>
+<p>Use <code>-jpegopt optimize=y</code> since it reduces the file size slightly.</p>
+<p>Crop images using <code>-x, -y, -H, -W</code>.</p>
+<p>Resolution <code>-r = 100</code> can be ok for well-scanned B&amp;W print publications.</p>
 <p>The jpeg filenames should begn with the <em>short name</em> followed by a hyphen followed by a zero-padded page number (number from the PDF). The <code>pubs</code> table will handle the offset to get the right page numbers of the original publication.</p>
 <p>Save the jpeg files in a directory named with the publicaion <em>short name</em>. Save this directory under the <code>pubs</code> directory.</p>
 <p>TODO: deal with issue of image file size and quantity. Do we need all pages?</p>
