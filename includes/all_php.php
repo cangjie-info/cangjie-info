@@ -13,5 +13,32 @@ function getFilteredId() {
   return $id;
 }
 
+function check_pub_dir($pub_name) {
+// checks that dir exists, that files of the correct format are present 
+// (at least one), and that their img numbers form a 
+// continuous integer sequence starting from one. 
+// Files in other formats (including . and ..) are ignored.
+// If so, returns the number
+// of images. If not, returns false.
+  $dir = "../pubs/$pub_name";
+  if(!file_exists($dir)) {
+    return false;
+  }
+  $handle = opendir($dir);
+  $img_numbers = array();
+  while(false !== ($entry = readdir($handle))) {
+    if(preg_match("/($pub_name)-([0-9]{3})(\.jpg|\.jpeg)/", $entry, $matches)) {
+      $img_numbers[] = intval($matches[2]);
+    }
+  }
+  if(count($img_numbers) == 0) return false;
+  sort($img_numbers);
+  for($n = 0; $n < count($img_numbers); $n++) {
+    if($img_numbers[$n] != $n + 1) return false;
+  }
+  return count($img_numbers);
+}
+
 ?>
+
 
