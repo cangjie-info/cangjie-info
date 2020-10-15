@@ -22,6 +22,6 @@ function initMap() {
 	}
 }
 </script>
-<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDy02I_mXcS9t8ND9iAlWIyo95zStY2x7U&callback=initMap">
+<script defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo $google_maps_key; ?>&callback=initMap">
 </script>
 
