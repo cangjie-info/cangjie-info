@@ -41,7 +41,13 @@ $stmtNextId = $db->prepare($qryNextId);
 $stmtNextId->bindValue(':narrative_id', $sentence->narrative_id);
 $stmtNextId->bindValue(':number', $sentence->number);
 $stmtNextId->execute();
-$sentence->next_id = $stmtNextId->fetch()['id'];
+$result = $stmtNextId->fetch();
+if(!$result) {
+	$sentence->next_id = FALSE;
+}
+else {
+	$sentence->next_id = $result['id'];
+}
 
 $qryPrevId = 'SELECT id FROM txt_sentences ' . 
   'WHERE narrative_id=:narrative_id ' .
@@ -50,7 +56,13 @@ $stmtPrevId = $db->prepare($qryPrevId);
 $stmtPrevId->bindValue(':narrative_id', $sentence->narrative_id);
 $stmtPrevId->bindValue(':number', $sentence->number);
 $stmtPrevId->execute();
-$sentence->prev_id = $stmtPrevId->fetch()['id'];
+$result = $stmtPrevId->fetch();
+if(!$result) {
+	$sentence->prev_id = FALSE;
+}
+else {
+	$sentence->prev_id = $result['id'];
+}
 
 // html view of sentence object
 require_once('../includes/all_html_top.html.php');
