@@ -1,0 +1,5 @@
+@@@COLLECTION=論語
+@@@SUBCOLLECTION=學而
+@@@NARRATIVE
+A REGULAR LINE
+Another regular line
