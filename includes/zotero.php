@@ -1,6 +1,15 @@
 <?php 
 
 //library of functions for Zotero integration.
+// 38nTdQsBI8B9911gNJBsWYQs
+// https://api.zotero.org/groups/2469003/items/ED8LAGL6?v=3&format=bib&style=elsevier-harvard&key=38nTdQsBI8B9911gNJBsWYQs
+//
+function getZotItemFormatted($key) {
+	$url = 'https://api.zotero.org/groups/2469003/items/' . $key . '?v=3';
+	$zot_data = file_get_contents($url);
+	return $url;
+}
+
 
 function getZotItem($key) {
   $url = 'https://api.zotero.org/groups/2469003/items/' . $key . '?v=3';
