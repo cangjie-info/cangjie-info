@@ -53,7 +53,13 @@ $stmtNextId = $db->prepare($qryNextId);
 $stmtNextId->bindValue(':subcollection_id', $narrative->subcollection_id);
 $stmtNextId->bindValue(':number', $narrative->number);
 $stmtNextId->execute();
-$narrative->next_id = $stmtNextId->fetch()['id'];
+$result = $stmtNextId->fetch();
+if(!$result) {
+	$narrative->next_id = FALSE;
+}
+else {
+	$narrative->next_id = $result['id'];
+}
 
 $qryPrevId = 'SELECT id FROM txt_narratives ' . 
   'WHERE subcollection_id=:subcollection_id ' .
@@ -62,7 +68,13 @@ $stmtPrevId = $db->prepare($qryPrevId);
 $stmtPrevId->bindValue(':subcollection_id', $narrative->subcollection_id);
 $stmtPrevId->bindValue(':number', $narrative->number);
 $stmtPrevId->execute();
-$narrative->prev_id = $stmtPrevId->fetch()['id'];
+$result = $stmtPrevId->fetch();
+if(!$result) {
+	$narrative->prev_id = FALSE;
+}
+else {
+	$narrative->prev_id = $result['id'];
+}
 
 // html view of TxtNarrative object
 require_once('../includes/all_html_top.html.php');
