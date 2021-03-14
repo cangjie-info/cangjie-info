@@ -1,29 +1,32 @@
 <?php
 
+// DISPLAY, DELETE AND ADD ACTIONS FOR EXCAVATIONS.
+
 require_once('../includes/all_php.php');
 require_once('../includes/db.php');
 
+// get action from $_POST variable
 $action = filter_input(INPUT_POST, 'action');
+// default to "display"
 if($action == NULL){
 	$action = "display";
 }
 
+// DELETE ACTION
 if($action == "delete"){
 	$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 	$qryDelete = 'DELETE FROM arch_excavations ' .
-		'WHERE id = ' . $id . ';';
+		'WHERE id = :id;';
 	$stmtDelete = $db->prepare($qryDelete);
+	$stmtDelete->bindValue(':id', $id);
 	$stmtDelete->execute();
-	header('Location: .?action=display');
+	header('location: .'); // action will default to "display" on reload. 
+	exit;
 }
 
-else if($action=="add"){
-	// trim $_POST
-	function trim_value(&$value)
-	{
-		 $value = trim($value);
-	}
-	array_filter($_POST, 'trim_value');
+// ADD ACTION
+else if($action == "add"){
+	trim_POST();
 	// get data fields
 	$name_zh = filter_input(INPUT_POST, 'name_zh', FILTER_SANITIZE_SPECIAL_CHARS);
 	$name_en = filter_input(INPUT_POST,	'name_en', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -38,6 +41,7 @@ else if($action=="add"){
 		|| $longitude == null || $longitude == false || $excavator == null) {
 		$error_message = "Invalid excavation data.";
 		include('../includes/error.php');
+		exit;
 	}
 	else {
 		$query = 'INSERT INTO arch_excavations (name_zh , name_en, year, location, 
@@ -54,10 +58,12 @@ else if($action=="add"){
 		$statement->bindValue(':excavator', $excavator);
 		$statement->execute();
 		$statement->closeCursor();
-		header('Location: .?action=display');
+		header('location: .');
+		exit;
 	}
 }
 
+// DISPLAY ACTION
 else if($action == "display"){
 	$qryExcavations = 'SELECT * FROM arch_excavations ' .
 	  'ORDER BY name_en;';
@@ -65,9 +71,7 @@ else if($action == "display"){
 	$stmtExcavations->execute();
 	$excavations = $stmtExcavations->fetchAll(PDO::FETCH_ASSOC);
 	$stmtExcavations->closeCursor();
-
 	$json_excavations = json_encode($excavations);
-
 	require_once('../includes/all_html_top.html.php');
 	require_once('excavations.html.php');
 	require_once('../includes/all_html_bottom.html.php');

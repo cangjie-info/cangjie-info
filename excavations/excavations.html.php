@@ -1,8 +1,10 @@
 <h1>All Excavations:</h1>
+<!-- MAP -->
 <div id="map"></div>
-
+<!-- EXCAVATIONS LIST -->
 <?php foreach($excavations as $excavation) : ?>
-<p><a href="../excavation/?id=<?php echo $excavation['id']; ?>"/>
+<p>
+<a href="../excavation/?id=<?php echo $excavation['id']; ?>"/>
 <?php 
 echo $excavation['name_en'] . ' ' 
 	. $excavation['name_zh'] . ' '
@@ -16,11 +18,8 @@ echo $excavation['name_en'] . ' '
 	<input type="submit" value="delete">
 </form>
 <?php endforeach; ?>
-
 <hr />
-
-
-
+<!-- ADD NEW FORM -->
 <form action="." method="post" id="add_form">
 <input type="hidden" name="action" value="add">
 <label>name (zh):</label>
@@ -46,6 +45,7 @@ echo $excavation['name_en'] . ' '
 </br>
 <input type="submit" value="Add">
 </form>
+<!-- JS FOR MAP -->
 <script>
 function initMap() {
 	var excavations = <?php echo $json_excavations; ?>;
@@ -63,4 +63,3 @@ function initMap() {
 </script>
 <script defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo $google_maps_key; ?>&callback=initMap">
 </script>
-

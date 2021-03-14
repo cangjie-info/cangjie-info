@@ -5,6 +5,13 @@ error_reporting(E_ALL);
 
 // HELPER FUNCTIONS
 
+function trim_POST() {
+	function trim_value(&$value) {
+		$value = trim($value);
+	}
+	array_filter($_POST, 'trim_value');
+}
+
 function getFilteredId() {
   $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
   if($id === false or $id === NULL) { // if id is not int, or not set
