@@ -40,5 +40,3 @@ function check_pub_dir($pub_name) {
 }
 
 ?>
-
-
