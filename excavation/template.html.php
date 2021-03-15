@@ -24,25 +24,25 @@ echo $excavation['name_en'] . ' '
 <input type="hidden" name="action" value="add">
 <label>name (zh):</label>
 <input type="text" name="name_zh">
-<br>
+</br>
 <label>year:</label>
 <input type="text" name="year">
-<br>
+</br>
 <label>name (en):</label>
 <input type="text" name="name_en">
-<br>
+</br>
 <label>location:</label>
 <input type="text" name="location">
-<br>
+</br>
 <label>latitude:</label>
 <input type="text" name="latitude">
-<br>
+</br>
 <label>longitude:</label>
 <input type="text" name="longitude">
-<br>
+</br>
 <label>excavator:</label>
 <input type="text" name="excavator">
-<br>
+</br>
 <input type="submit" value="Add">
 </form>
 <!-- JS FOR MAP -->

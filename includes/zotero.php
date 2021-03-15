@@ -1,21 +1,24 @@
 <?php 
 
+$userID = "160881";
+$zot_group_id = "2838708";
+
 //library of functions for Zotero integration.
 // 38nTdQsBI8B9911gNJBsWYQs
 // https://api.zotero.org/groups/2469003/items/ED8LAGL6?v=3&format=bib&style=elsevier-harvard&key=38nTdQsBI8B9911gNJBsWYQs
 //
 function getZotItemFormatted($key) {
-	$url = 'https://api.zotero.org/groups/2469003/items/' . $key . '?v=3';
+	global $zot_group_id;
+	$url = 'https://api.zotero.org/groups/' . $zot_group_id . '/items/' . $key . '?v=3&format=bib&style=elsevier-harvard';
 	$zot_data = file_get_contents($url);
-	return $url;
+	return $zot_data;
 }
 
-
 function getZotItem($key) {
-  $url = 'https://api.zotero.org/groups/2469003/items/' . $key . '?v=3';
-  $zot_data_json = file_get_contents($url);
-  $zot_data = json_decode($zot_data_json, true)['data'];
-  return $zot_data;
+	$url = 'https://api.zotero.org/groups/' . $zot_group_id . '/items/' . $key . '?v=3';
+	$zot_data_json = file_get_contents($url);
+	$zot_data = json_decode($zot_data_json, true)['data'];
+	return $zot_data;
 }
 
 function getZotBibString($key) {
