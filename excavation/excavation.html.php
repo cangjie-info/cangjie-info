@@ -20,10 +20,46 @@ foreach($excavation as $key => $value){
 ?>
 	<label><?php echo $key; ?>:</label>
 	<input type='text' name='<?php echo $key; ?>' value='<?php echo $value; ?>'>
-	<br>
 <?php } ?>
 <input type="submit" value="Update">
 </form>
+
+<!-- CONTEXTS -->
+<hr>
+<h2>Archeological contexts</h2>
+<!-- display contexts --> 
+<?php foreach($contexts as $context) {
+	echo $context['name'] . ' (' . $context['context_type'] . ') '
+		. '"' . $context['description'] . '" ' . $context['date_early']
+		. '-' . $context['date_late'];
+?>
+<form action="." method="post">
+<input type="hidden" name="action" value="delete_context">
+<input type="hidden" name="id" value="<?php echo $id; ?>">
+<input type="hidden" name="context_id" value="<?php echo $context['id']; ?>">
+<input type="submit" value="delete">
+</form>
+<?php
+	echo '<br>';
+}
+?>
+<!-- add context form -->
+<form action="." method="post">
+<input type="hidden" name="action" value="add_context">
+<input type="hidden" name="id" value="<?php echo $id; ?>">
+<label>Context name:</label>
+<input type="text" name="name">
+<label>Context type:</label>
+<input type="text" name="context_type">
+<label>Description:</label>
+<input type="text" name="description">
+<label>Date early:</label>
+<input type="text" name="date_early">
+<label>Date late:</label>
+<input type="text" name="date_late">
+<input type="submit" value="Add">
+</form>
+
 
 <!-- REFS -->
 <hr>
@@ -47,7 +83,7 @@ foreach($excavation as $key => $value){
 	echo "<br>";
 }
 ?>
-<form action="." method="post" id="new_ref">
+<form action="." method="post" id="add_ref">
 <input type="hidden" name="action" value="add_ref">
 <input type="hidden" name="id" value="<?php echo $id; ?>">
 <label>Zotero item key</label>

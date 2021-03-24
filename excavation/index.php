@@ -15,6 +15,45 @@ if($action == NULL){
 	$action = "display";
 }
 
+// ADD CONTEXT ACTION
+if($action === "add_context"){
+	trim_POST();
+	// get data fields
+	// id must be from POST not GET
+	$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+	$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
+	$context_type = filter_input(INPUT_POST, 'context_type', FILTER_SANITIZE_SPECIAL_CHARS);
+	$description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS);
+	$date_early = filter_input(INPUT_POST, 'date_early', FILTER_VALIDATE_INT);
+	$date_late = filter_input(INPUT_POST, 'date_late', FILTER_VALIDATE_INT);
+	// validate input
+	if($id === null || $id === false || $name === null || $context_type === null
+		|| $description === null || $date_early === null || $date_early === false 
+		|| $date_late === null || $date_late === false) {
+		$error_message = "Bad context data or fields missing.";
+		include('../includes/error.php');
+		exit;
+	}
+	else {
+		$qry = 'INSERT INTO arch_contexts '
+			. '(arch_excavation_id, name, context_type, description, date_early, date_late) '
+			. 'VALUES (:id, :name, :context_type, :description, :date_early, :date_late);';
+		$stmt = $db->prepare($qry);
+		$stmt->bindValue(':id', $id);
+		$stmt->bindValue(':name', $name);
+		$stmt->bindValue(':context_type', $context_type);
+		$stmt->bindValue(':description', $description);
+		$stmt->bindValue(':date_early', $date_early);
+		$stmt->bindValue(':date_late', $date_late);
+		$stmt->execute();
+		header('location: .' . "?id=$id");
+		exit;
+	}
+}
+
+
+// DELETE CONTEXT ACTION
+
 //DELETE REF ACTION
 if($action === 'delete_ref'){
 	trim_POST();
@@ -53,7 +92,6 @@ if($action === 'add_ref'){
 		$stmt->bindValue(':pages', $pages);
 		$stmt->bindValue(':note', $note);
 		$stmt->execute();
-		$stmt->closeCursor();
 		header('location: .' . "?id=$id");
 		exit;
 	}
@@ -126,12 +164,20 @@ if($action === 'display'){
 	}
 	else {
 		$excavation = $excavation[0];
+		// query arch_excavation_refs
 		$qry = 'SELECT id, zot_item_key, pages, note '
 			. 'FROM arch_excavation_refs WHERE arch_excavation_id = :id;';
 		$stmt = $db->prepare($qry);
 		$stmt->bindValue(':id', $id);
 		$stmt->execute();
 		$refs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		$stmt->closeCursor();
+		// query arch_contexts
+		$qry = 'SELECT * FROM arch_contexts WHERE arch_excavation_id = :id;';
+		$stmt = $db->prepare($qry);
+		$stmt->bindValue(':id', $id);
+		$stmt->execute();
+		$contexts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		$stmt->closeCursor();
 		require_once('../includes/all_html_top.html.php');
 		require_once('excavation.html.php');
@@ -140,50 +186,4 @@ if($action === 'display'){
 	}
 }
 
-
-
-
-
-/*
-
-
-// get action from $_POST variable
-$action = filter_input(INPUT_POST, 'action');
-// default to "display"
-if($action == NULL){
-	$action = "display";
-}
-
-// DELETE ACTION
-if($action == "delete"){
-	// do deleting here
-	header('location: .'); // action will default to "display" on reload. 
-	exit;
-}
-
-// ADD ACTION
-else if($action == "add"){
-	trim_POST();
-	// get data fields
-	// validate input
-	if (not valid) {
-		$error_message = "Invalid excavation data.";
-		include('../includes/error.php');
-		exit;
-	}
-	else {
-		$query = 'INSERT INTO etc. etc.';
-		header('location: .');
-		exit;
-	}
-}
-
-// DISPLAY ACTION
-else if($action == "display"){
-	$qry = 'SELECT * FROM etc. etc. ';
-	require_once('../includes/all_html_top.html.php');
-	require_once('template.html.php');
-	require_once('../includes/all_html_bottom.html.php');
-}
- */
 ?>
