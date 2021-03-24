@@ -28,11 +28,14 @@ foreach($excavation as $key => $value){
 <hr>
 <h2>Archeological contexts</h2>
 <!-- display contexts --> 
-<?php foreach($contexts as $context) {
+<?php foreach($contexts as $context) { ?>
+<a href="../context/?id=<?php echo $context['id'];?>">
+<?php
 	echo $context['name'] . ' (' . $context['context_type'] . ') '
 		. '"' . $context['description'] . '" ' . $context['date_early']
 		. '-' . $context['date_late'];
 ?>
+</a>
 <form action="." method="post">
 <input type="hidden" name="action" value="delete_context">
 <input type="hidden" name="id" value="<?php echo $id; ?>">

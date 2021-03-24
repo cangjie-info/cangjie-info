@@ -9,18 +9,9 @@ $action = filter_input(INPUT_POST, 'action');
 if($action === NULL){
 	$action = "display";
 }
-
-/* 
-
-// DELETE ACTION
-if($action == "delete"){
-	// do deleting here
-	header('location: .'); // action will default to "display" on reload. 
-	exit;
-}
-
+/*
 // ADD ACTION
-else if($action == "add"){
+if($action == "add"){
 	trim_POST();
 	// get data fields
 	// validate input
@@ -35,11 +26,46 @@ else if($action == "add"){
 		exit;
 	}
 }
-
  */
 
+// EDIT ACTION
+if($action === 'edit'){
+	trim_POST();
+	// get data fields
+	$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+	$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
+	$context_type = filter_input(INPUT_POST, 'context_type', FILTER_SANITIZE_SPECIAL_CHARS);
+	$description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS);
+	$date_early = filter_input(INPUT_POST, 'date_early', FILTER_VALIDATE_INT);
+	$date_late = filter_input(INPUT_POST, 'date_late', FILTER_VALIDATE_INT);
+	// validate
+	if($name == null || $context_type == null 
+		|| $date_early == null || $date_early == false
+		|| $date_late == null || $date_late == false){
+		$error_message = "Invalid context data";
+		include('../includes/error.php');
+		exit;
+	}
+	else {
+		$qry = 'UPDATE arch_contexts ' 
+			. 'SET name = :name, context_type = :context_type, '
+			. 'description = :description, '
+			. 'date_early = :date_early, date_late = :date_late '
+			. 'WHERE id = :id;';
+		$stmt = $db->prepare($qry);
+		$stmt->bindValue(':name', $name);
+		$stmt->bindValue(':context_type', $context_type);
+		$stmt->bindValue(':description', $description);
+		$stmt->bindValue(':date_early', $date_early);
+		$stmt->bindValue(':date_late', $date_late);
+		$stmt->execute();
+		header('location: .' . "?id=$id");
+		exit();
+	}
+}
+
 // DISPLAY ACTION
-if($action == "display"){
+else if($action == "display"){
 	$id = filter_input(INPUT_GET, 'id');
 	if($id === NULL){
 		$error_message = 'Need an integer id for context.';

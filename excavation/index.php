@@ -51,11 +51,20 @@ if($action === "add_context"){
 	}
 }
 
-
 // DELETE CONTEXT ACTION
+else if($action === "delete_context"){
+	$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+	$context_id = filter_input(INPUT_POST, 'context_id', FILTER_VALIDATE_INT);
+	$qry = 'DELETE FROM arch_contexts WHERE id=:id;';
+	$stmt = $db->prepare($qry);
+	$stmt->bindValue(':id', $context_id);
+	$stmt->execute();
+	header('location: .' . "?id=$id");
+	exit;
+}
 
 //DELETE REF ACTION
-if($action === 'delete_ref'){
+else if($action === 'delete_ref'){
 	trim_POST();
 	$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 	$ref_id = filter_input(INPUT_POST, 'ref_id', FILTER_VALIDATE_INT);
@@ -68,7 +77,7 @@ if($action === 'delete_ref'){
 }
 
 //ADD REF ACTION
-if($action === 'add_ref'){
+else if($action === 'add_ref'){
 	trim_POST();
 	//get data fields
 	//NB id must come from POST, not GET
@@ -98,7 +107,7 @@ if($action === 'add_ref'){
 }
 
 //EDIT ACTION
-if($action === 'edit'){
+else if($action === 'edit'){
 	trim_POST();
 	//get data fields
 	//NB id must come from POST, not GET
@@ -140,7 +149,7 @@ if($action === 'edit'){
 }
 
 // DISPLAY
-if($action === 'display'){
+else if($action === 'display'){
 	// get excavation id from &_GET
 	$id = filter_input(INPUT_GET, 'id');
 	if($id === NULL){
@@ -184,6 +193,12 @@ if($action === 'display'){
 		require_once('../includes/all_html_bottom.html.php');
 		exit;
 	}
+}
+
+else {
+	$error_message = "Action unknown.";
+	include('../includes/error.php');
+	exit;
 }
 
 ?>
