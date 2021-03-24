@@ -69,6 +69,13 @@ if($action == "display"){
 		$stmt->execute();
 		$objects = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		$stmt->closeCursor();
+		$qry = 'SELECT name_en, name_zh, year '
+			. 'FROM arch_excavations WHERE id = :id;';
+		$stmt = $db->prepare($qry);
+		$stmt->bindValue(':id', $context['arch_excavation_id']);
+		$stmt->execute();
+		$excavation = $stmt->fetch(PDO::FETCH_ASSOC);
+		$stmt->closeCursor();
 		require_once('../includes/all_html_top.html.php');
 		require_once('context.html.php');
 		require_once('../includes/all_html_bottom.html.php');

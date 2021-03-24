@@ -6,8 +6,11 @@ echo $context['name'] . ' (' . $context['context_type'] . ')';
 <!-- CONTEXT DETAILS -->
 <p><?php echo $context['description'];?></p>
 <p>Date: <?php echo $context['date_early'] . ' - ' . $context['date_late']; ?></p>
-
-
+<p>Excavation: 
+<a href='../excavation/?id=<?php echo $context['arch_excavation_id']; ?>'>
+<?php echo $excavation['name_en'] . ' ' . $excavation['name_zh'] . ' (' . $excavation['year'] . ')'; ?>
+</a>
+</p>
 <!-- NEXT CONTEXT -->
 <!-- PREV CONTEXT -->
 <!-- EDIT CONTEXT DETAILS -->
