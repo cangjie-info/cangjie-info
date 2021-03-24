@@ -34,7 +34,29 @@
 </form>
 
 <!-- ARCH_OBJECTS IN CONTEXT -->
+<hr>
+<h2>Archeological objects in context</h2>
+<?php foreach($arch_objects as $arch_object){ ?>
+<a href="../arch_object/?id=<?php echo $arch_object['id'];?>">
+	<?php echo $arch_object['name']; ?>
+</a>
+<form action='.' method='post'>
+	<input type='hidden' name='action' value='delete_arch_object'>
+	<input type='hidden' name='context_id' value='<?php echo $context['id']; ?>'>
+	<input type='hidden' name='object_id' value='<?php echo $arch_object['id']; ?>'>
+	<input type='submit' value='delete'>
+</form>
+</br>
+<?php } ?>
 <!-- ADD NEW ARCH_OBJECT -->
+<p>Add new archeological object to this context.</p>
+<form action="." method="post">
+	<input type="hidden" name="action" value="add_arch_object">
+	<input type="hidden" name="id" value="<?php echo $context['id']; ?>">
+	<label>Archeological object name:</label>
+	<input type="text" name="name">
+	<input type="submit" name="add" value="Add">
+</form>
 	<!-- create inscr_object to go with it by default -->
 <!-- ASSOCIATED INSCR_OBJECTS -->
 <!-- ASSOCIATED INSCR_SURFS -->

@@ -42,10 +42,8 @@ foreach($excavation as $key => $value){
 <input type="hidden" name="context_id" value="<?php echo $context['id']; ?>">
 <input type="submit" value="delete">
 </form>
-<?php
-	echo '<br>';
-}
-?>
+<br>
+<?php } ?>
 <!-- add context form -->
 <form action="." method="post">
 <input type="hidden" name="action" value="add_context">

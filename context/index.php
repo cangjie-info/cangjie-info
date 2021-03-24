@@ -28,8 +28,35 @@ if($action == "add"){
 }
  */
 
+// ADD ARCH_OBJECT ACTION
+if($action === 'add_arch_object'){
+	trim_POST();
+	$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+	$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
+	$qry = "INSERT INTO arch_objects (arch_context_id, name) "
+		. "VALUES (:id, :name);";
+	$stmt = $db->prepare($qry);
+	$stmt->bindValue(':id', $id);
+	$stmt->bindValue(':name', $name);
+	$stmt->execute();
+	header('location: .' . "?id=$id");
+	exit;
+}
+
+// DELETE ARCH_OBJECT ACTION
+else if($action === 'delete_arch_object'){
+	$context_id = filter_input(INPUT_POST, 'context_id', FILTER_VALIDATE_INT);
+	$object_id = filter_input(INPUT_POST, 'object_id', FILTER_VALIDATE_INT);
+	$qry = 'DELETE FROM arch_objects WHERE id=:id';
+	$stmt = $db->prepare($qry);
+	$stmt->bindValue(':id', $object_id);
+	$stmt->execute();
+	header('location: .' . "?id=$context_id");
+	exit;
+}
+
 // EDIT ACTION
-if($action === 'edit'){
+else if($action === 'edit'){
 	trim_POST();
 	// get data fields
 	$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
@@ -48,19 +75,20 @@ if($action === 'edit'){
 	}
 	else {
 		$qry = 'UPDATE arch_contexts ' 
-			. 'SET name = :name, context_type = :context_type, '
-			. 'description = :description, '
-			. 'date_early = :date_early, date_late = :date_late '
-			. 'WHERE id = :id;';
+			. 'SET name=:name, context_type=:context_type, '
+			. 'description=:description, '
+			. 'date_early=:date_early, date_late=:date_late '
+			. 'WHERE id=:id;';
 		$stmt = $db->prepare($qry);
 		$stmt->bindValue(':name', $name);
 		$stmt->bindValue(':context_type', $context_type);
 		$stmt->bindValue(':description', $description);
 		$stmt->bindValue(':date_early', $date_early);
 		$stmt->bindValue(':date_late', $date_late);
+		$stmt->bindValue(':id', $id);
 		$stmt->execute();
 		header('location: .' . "?id=$id");
-		exit();
+		exit;
 	}
 }
 
@@ -88,13 +116,15 @@ else if($action == "display"){
 	}
 	else {
 		$context = $context[0];
+		// query arch_objects
 		$qry = 'SELECT * FROM arch_objects '
 			. 'WHERE arch_context_id = :id;';
 		$stmt = $db->prepare($qry);
 		$stmt->bindValue(':id', $id);
 		$stmt->execute();
-		$objects = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		$arch_objects = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		$stmt->closeCursor();
+		// query context
 		$qry = 'SELECT name_en, name_zh, year '
 			. 'FROM arch_excavations WHERE id = :id;';
 		$stmt = $db->prepare($qry);

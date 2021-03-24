@@ -59,7 +59,14 @@ else if($action === "delete_context"){
 	$stmt = $db->prepare($qry);
 	$stmt->bindValue(':id', $context_id);
 	$stmt->execute();
-	header('location: .' . "?id=$id");
+	$sqlstate = $stmt->errorInfo();
+	if($sqlstate[0] === 0){
+		header('location: .' . "?id=$id");
+	}
+	else {
+		$error_message = 'DB ERROR: ' . $sqlstate[2];
+		include('../includes/error.php');
+	}
 	exit;
 }
 
