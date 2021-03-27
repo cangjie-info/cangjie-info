@@ -31,15 +31,40 @@ if($action == "add"){
 // ADD ARCH_OBJECT ACTION
 if($action === 'add_arch_object'){
 	trim_POST();
-	$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-	$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
-	$qry = "INSERT INTO arch_objects (arch_context_id, name) "
-		. "VALUES (:id, :name);";
+	$context_id = filter_input(INPUT_POST, 'context_id', FILTER_VALIDATE_INT);
+	$arch_object_name = filter_input(INPUT_POST, 'arch_object_name', FILTER_SANITIZE_SPECIAL_CHARS);
+	$inscr_object_name = filter_input(INPUT_POST, 'inscr_object_name', FILTER_SANITIZE_SPECIAL_CHARS);
+	$inscr_object_id = filter_input(INPUT_POST, 'inscr_object_id', FILTER_VALIDATE_INT);
+	$inscr_object_type = filter_input(INPUT_POST, 'inscr_object_type', FILTER_SANITIZE_SPECIAL_CHARS);
+	$surf_name = filter_input(INPUT_POST, 'surf_name', FILTER_SANITIZE_SPECIAL_CHARS);
+	if(isset($_POST['add_inscr'])) {
+		$qry = 'INSERT INTO inscr_objects (name, object_type) VALUES (:name, :object_type);';
+		$stmt = $db->prepare($qry);
+		$stmt->bindValue(':name', $inscr_object_name); // name matches 
+		$stmt->bindValue(':object_type', $inscr_object_type);
+		$stmt->execute();
+		$inscr_object_id = $db->lastInsertId();
+		$qry = 'INSERT INTO inscr_surfaces (inscr_object_id, name) '
+			. 'VALUES (:inscr_object_id, :name);';
+		$stmt = $db->prepare($qry);
+		$stmt->bindValue(':inscr_object_id', $inscr_object_id);
+		$stmt->bindValue(':name', $surf_name);
+		$stmt->execute();
+		$inscr_surface_id = $db->lastInsertId();
+		$qry = 'INSERT INTO inscrs (inscr_surface_id) '
+			. 'VALUES (:inscr_surface_id);';
+		$stmt = $db->prepare($qry);
+		$stmt->bindValue(':inscr_surface_id', $inscr_surface_id);
+		$stmt->execute();
+	}
+	$qry = 'INSERT INTO arch_objects (arch_context_id, name, inscr_object_id) '
+			. 'VALUES (:arch_context_id, :name, :inscr_object_id);';
 	$stmt = $db->prepare($qry);
-	$stmt->bindValue(':id', $id);
-	$stmt->bindValue(':name', $name);
+	$stmt->bindValue(':arch_context_id', $context_id);
+	$stmt->bindValue(':name', $arch_object_name);
+	$stmt->bindValue(':inscr_object_id', $inscr_object_id);
 	$stmt->execute();
-	header('location: .' . "?id=$id");
+	header('location: .' . "?id=$context_id");
 	exit;
 }
 
@@ -116,7 +141,7 @@ else if($action == "display"){
 	}
 	else {
 		$context = $context[0];
-		// query arch_objects
+		// query arch_objects and inscr_objects TODO
 		$qry = 'SELECT * FROM arch_objects '
 			. 'WHERE arch_context_id = :id;';
 		$stmt = $db->prepare($qry);
