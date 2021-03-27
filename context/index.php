@@ -119,7 +119,7 @@ else if($action === 'edit'){
 
 // DISPLAY ACTION
 else if($action == "display"){
-	$id = filter_input(INPUT_GET, 'id');
+	$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 	if($id === NULL){
 		$error_message = 'Need an integer id for context.';
 		include('../includes/error.php');
