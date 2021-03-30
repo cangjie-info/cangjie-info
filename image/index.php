@@ -26,7 +26,7 @@ case 'surface':
 		include('../includes/error.php');
 		exit;
 	}
-	$image = new Imagick('http://localhost/IMGS/' . $img_data['path'] . '.jpg');
+	$image = new Imagick('../../IMGS/' . $img_data['path'] . '.jpg');
 	if($img_data['img_rot'] === null || $img_data['img_rot'] === '0') {
 		// do nothing
 	} 
