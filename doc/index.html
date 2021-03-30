@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>index</title>
+  <title>Documentation</title>
   <style type="text/css">
       code{white-space: pre-wrap;}
       span.smallcaps{font-variant: small-caps;}
@@ -13,8 +13,11 @@
   </style>
 </head>
 <body>
+<header id="title-block-header">
+<h1 class="title">Documentation</h1>
+</header>
+<p>Write documetation using Vim in md format. Use <a href="https://pandoc.org/">pandoc</a> to generate html. A sample makefile to automate this and write it to site <code>/doc/</code> folder is given below. The html format will be tracked by Git. All documentation that is not public goes here. Export html files to <code>/doc/</code> under webroot. Public documentation goes under <code>/pubdoc/</code>. Examples of markdown formatting are given below.</p>
 <h1 id="documentation-index">Documentation index</h1>
-<p>Write documetation using Vim in md format. Use pandoc to generate html. A sample makefile to automate this and write it to site /doc/ folder is given below. The html format will be tracked by Git. All documentation that is not public goes here. Export html files to <code>/doc/</code> under webroot. Public documentation goes under <code>/pubdoc/</code>.</p>
 <ol type="1">
 <li><a href="pub_imgs.html">Publication images</a></li>
 <li><a href="git.html">Git</a></li>
@@ -38,5 +41,35 @@ PANDOC_HTML_OPTIONS=--to html5
         pandoc $(PANDOC_OPTIONS) $(PANDOC_HTML_OPTIONS) -o $@ $&lt;
 
 .PHONY: all</code></pre>
+<p>These examples of markdown formatting come from the <a href="https://pandoc.org/MANUAL.html#pandocs-markdown">Pandoc page</a></p>
+<h1 id="a-level-one-heading">A level one heading</h1>
+<h2 id="a-level-two-heading">A level-two heading</h2>
+<h3 id="a-level-three-heading">A level-three heading</h3>
+<h1 id="a-level-one-heading-with-a-link-and-emphasis">A level-one heading with a <a href="/url">link</a> and <em>emphasis</em></h1>
+<p><em>italic</em></p>
+<pre><code>this
+is 
+verbatim text.</code></pre>
+<pre><code>&lt;?php foreach($strings as $string) {
+    //do nothing.
+}
+exit;
+?&gt;</code></pre>
+<div class="line-block">There was an old whore of Baroda,<br />
+Who kept an immoral pagoda.<br />
+The wall of her halls<br />
+Were festooned with the balls<br />
+And the tools of the fools who bestrode her.</div>
+<ul>
+<li>one</li>
+<li>two</li>
+<li><p>three</p></li>
+<li>yi</li>
+<li>er</li>
+<li><p>san</p></li>
+<li><p>loose list item one</p></li>
+<li><p>loose list item two</p></li>
+<li><p>loose list item three.</p></li>
+</ul>
 </body>
 </html>

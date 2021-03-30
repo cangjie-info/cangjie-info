@@ -21,7 +21,7 @@
 <h2>Inscribed surfaces: </h2>
 <?php foreach($surfaces as $surface) { ?>
 	<h3>Surface: </h3>
-	<a href='../surface/?id=<?php echo $surface['id']; ?>'>
+	<a href='../inscr_surface/?id=<?php echo $surface['id']; ?>'>
 		<?php echo $surface['name']; ?>
 	</a>
 	<br>

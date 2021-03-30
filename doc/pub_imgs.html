@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>pub_imgs</title>
+  <title>IMAGES</title>
   <style type="text/css">
       code{white-space: pre-wrap;}
       span.smallcaps{font-variant: small-caps;}
@@ -13,16 +13,22 @@
   </style>
 </head>
 <body>
-<h1 id="publication-images">PUBLICATION IMAGES</h1>
-<p>Every publication should be stored as jpeg images. Each publication has a <em>short name</em> (lower-case, alphanumeric plus _). The publication is represented by a single row in the table <code>pubs</code>.</p>
-<p>Use <a href="https://manpages.debian.org/testing/poppler-utils/pdftoppm.1.en.html">pdftoppm</a> to extract PDFs to jpeg or png. E.g. …</p>
-<p><code>pdftoppm -jpeg -r 300 jingmen_1998_guodian.pdf gd</code></p>
-<p><code>pdftoppm -jpeg -jpegopt quality=100 -r 300 machengyuan_2001_shanghai.pdf sb1</code></p>
-<p>Use <code>-jpegopt optimize=y</code> since it reduces the file size slightly.</p>
-<p>Crop images using <code>-x, -y, -H, -W</code>.</p>
-<p>Resolution <code>-r = 100</code> can be ok for well-scanned B&amp;W print publications.</p>
-<p>The jpeg filenames should begn with the <em>short name</em> followed by a hyphen followed by a zero-padded page number (number from the PDF). The <code>pubs</code> table will handle the offset to get the right page numbers of the original publication.</p>
-<p>Save the jpeg files in a directory named with the publicaion <em>short name</em>. Save this directory under the <code>pubs</code> directory.</p>
-<p>TODO: deal with issue of image file size and quantity. Do we need all pages?</p>
+<header id="title-block-header">
+<h1 class="title">IMAGES</h1>
+</header>
+<h1 id="procedure-for-processing-images-from-pdf-sources.">Procedure for processing images from PDF sources.</h1>
+<ol type="1">
+<li><p>Rename pdf to <code>author_2021_title.pdf</code> format, add to Zotero, and copy PDF file to <code>LIB</code>.</p></li>
+<li><p>Use <a href="https://manpages.debian.org/testing/poppler-utils/pdftoppm.1.en.html">pdftoppm</a> to extract PDF pages to jpeg.</p>
+<p><code>pdftoppm -jpeg -r 200 author_1998_title.pdf gd</code></p>
+<p><code>pdftoppm -jpeg -jpegopt optimize=y quality=100 -r 300 author_2001_title.pdf sb1</code></p>
+<p><code>-r 200</code> is the output resolution: experiment! <code>-jpegopt optimize=y</code> reliably reduces filesize, and <code>quality=80</code> etc. sets the jpeg quality: experiment!. Aim for the smallest file size that still results in readable palaeogrpahic text. We don’t want to capture every nuanced brush stroke. But we want to be able to make determiniations as to graph identity.</p>
+<p>Crop images using <code>-x, -y, -H, -W</code>, but only if retains all page content and works for all pages.</p>
+<p>All files must be jpeg files. (Consider conversion to <a href="https://en.wikipedia.org/wiki/WebP">WebP</a> in future.) All file extensions must be ‘.jpg’, since these are not stored in the <code>imgs</code> db table.</p></li>
+<li><p>Delete all pages that do not have inscibed surface images.</p></li>
+<li><p>Filenames for pages must be zero-padded page numbers, typically 3-digit. For large publications, 4+ digits. For journals, sometimes 2 digits is enough.</p></li>
+<li><p>Place page image files into a directory named for the publication (books) or journal issue. E.g. <code>qh1/061.jpg</code>, <code>ww2020.01/12.jpg</code>. Move directory to <code>IMGS</code> directory.</p></li>
+<li><p>Update <code>imgs</code> table with Zotero id, filename (minus .jpg extension).</p></li>
+</ol>
 </body>
 </html>
