@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>MySQL database management</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">MySQL database management</h1>
+</header>
+<h2 id="manual-backup-of-remote-database">Manual backup of remote database</h2>
+<ol type="1">
+<li>ssh into cangjie.info: <code>ssh www.cangjie.info -l adamsmit</code></li>
+<li>cd to <code>BAK</code> directory</li>
+<li>use mysqldump to make backup: <code>mysqldump -u adamsmit -p adamsmit_oc &gt; bak.sql.2021.03.30</code></li>
+</ol>
+</body>
+</html>

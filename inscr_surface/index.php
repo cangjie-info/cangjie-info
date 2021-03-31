@@ -9,19 +9,40 @@ if($action === NULL){
 	$action = 'display';
 }
 
+// ADD INSCRIPTION TEXT
+if($action === 'add_inscr_text') {
+	$surf_id = filter_input(INPUT_POST, 'surf_id', FILTER_VALIDATE_INT);
+	$inscr_id = filter_input(INPUT_POST, 'inscr_id', FILTER_VALIDATE_INT);
+	$text = filter_input(INPUT_POST, 'text', FILTER_SANITIZE_SPECIAL_CHARS);
+	echo $text;
+	phpinfo();
+	$chars = mb_str_split($text);
+	foreach($chars as $char){
+		echo "<br>$char";
+	}
+	exit;
+}
+
 // EDIT ACTION
 if($action === 'edit'){
 	$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 	$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
 	$img_rot = filter_input(INPUT_POST, 'img_rot', FILTER_VALIDATE_INT);
 	$img_x = filter_input(INPUT_POST, 'img_x', FILTER_VALIDATE_INT);
+	$img_y = filter_input(INPUT_POST, 'img_y', FILTER_VALIDATE_INT);
+	$img_w = filter_input(INPUT_POST, 'img_w', FILTER_VALIDATE_INT);
+	$img_h = filter_input(INPUT_POST, 'img_h', FILTER_VALIDATE_INT);
 	$qry = 'UPDATE inscr_surfaces '
-		. 'SET name=:name, img_rot=:img_rot, img_x=:img_x '
+		. 'SET name=:name, img_rot=:img_rot, img_x=:img_x, img_y=:img_y, ' 
+		. 'img_w=:img_w, img_h=:img_h '
 		. 'WHERE id=:id;';
 	$stmt = $db->prepare($qry);
 	$stmt->bindValue(':name', $name);
 	$stmt->bindValue(':img_rot', $img_rot);
 	$stmt->bindValue(':img_x', $img_x);
+	$stmt->bindValue(':img_y', $img_y);
+	$stmt->bindValue(':img_w', $img_w);
+	$stmt->bindValue(':img_h', $img_h);
 	$stmt->bindValue(':id', $id);
 	$stmt->execute();
 	header('location: .' . "?id=$id");
