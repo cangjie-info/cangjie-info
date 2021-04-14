@@ -45,7 +45,7 @@ class InscrGraph {
     return 0;
   }
 
-  public static function isPrepunc($mark) {
+  public static function isPrepunc($char) {
     //return true if string $mark is a prepunc character
     if ($char == '“' or $char == '「' or $char == '‘' or $char == '『' or $char == '《') {
       return true;
@@ -53,7 +53,7 @@ class InscrGraph {
     return false;
   }
 
-  public static function isPostpunc($mark) {
+  public static function isPostpunc($char) {
     if ($char == '》'
       or $char == '。'
       or $char == '?' or $char == '？'
@@ -83,7 +83,12 @@ class InscrGraph {
   public function toString() {
     $prepunc = $this->getPrepuncString();
     $postpunc = $this->getPostpuncString();
-    return $prepunc . $this->graph . $postpunc;
+	 if(mb_strlen($this->graph) > 1) {
+		 return $prepunc . '{' . $this->graph . '}' . $postpunc;
+	 }
+	 else {
+		return $prepunc . $this->graph . $postpunc;
+	 }
   }
 
   private function getPrepuncString() {
