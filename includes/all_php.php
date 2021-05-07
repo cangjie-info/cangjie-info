@@ -5,6 +5,28 @@ error_reporting(E_ALL);
 
 // HELPER FUNCTIONS
 
+function yearToBCE($year){
+	if($year > 0) {
+		return $year . ' CE';
+	}
+	return -$year + 1 . ' BCE';
+}
+
+function rangeToBCE($year1, $year2){
+	if($year2 <= $year1){
+		$error_message = 'Year range error in rangeToBCE: $year1 = ' . $year1 . ', and $year2 = ' . $year2 . '.';
+		include('error.php');
+		exit();
+	}
+	if($year2 < 1){
+		return (-$year1 + 1) . '-' . (-$year2 + 1) . ' BCE';
+	}
+	if($year1 > 0){
+		return "$year1-$year2 CE";
+	}
+	return -$year1 + 1 . " BCE - $year2	CE";
+}
+
 function trim_POST() {
 	function trim_value(&$value) {
 		$value = trim($value);

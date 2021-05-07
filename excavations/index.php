@@ -8,7 +8,7 @@ require_once('../includes/db.php');
 // get action from $_POST variable
 $action = filter_input(INPUT_POST, 'action');
 // default to "display"
-if($action == NULL){
+if($action === NULL){
 	$action = "display";
 }
 
@@ -25,7 +25,7 @@ if($action == "delete"){
 }
 
 // ADD ACTION
-else if($action == "add"){
+if($action == "add"){
 	trim_POST();
 	// get data fields
 	$name_zh = filter_input(INPUT_POST, 'name_zh', FILTER_SANITIZE_SPECIAL_CHARS);

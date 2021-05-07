@@ -11,12 +11,12 @@ require_once('../includes/zotero.php');
 // get action from $_POST
 $action = filter_input(INPUT_POST, 'action');
 // default to "display"
-if($action == NULL){
+if($action === NULL){
 	$action = "display";
 }
 
 // ADD CONTEXT ACTION
-if($action === "add_context"){
+if($action == "add_context"){
 	trim_POST();
 	// get data fields
 	// id must be from POST not GET
@@ -52,7 +52,7 @@ if($action === "add_context"){
 }
 
 // DELETE CONTEXT ACTION
-else if($action === "delete_context"){
+if($action === "delete_context"){
 	$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 	$context_id = filter_input(INPUT_POST, 'context_id', FILTER_VALIDATE_INT);
 	$qry = 'DELETE FROM arch_contexts WHERE id=:id;';
@@ -60,7 +60,7 @@ else if($action === "delete_context"){
 	$stmt->bindValue(':id', $context_id);
 	$stmt->execute();
 	$sqlstate = $stmt->errorInfo();
-	if($sqlstate[0] === 0){
+	if($sqlstate[0] == 0){
 		header('location: .' . "?id=$id");
 	}
 	else {
@@ -71,7 +71,7 @@ else if($action === "delete_context"){
 }
 
 //DELETE REF ACTION
-else if($action === 'delete_ref'){
+if($action === 'delete_ref'){
 	trim_POST();
 	$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 	$ref_id = filter_input(INPUT_POST, 'ref_id', FILTER_VALIDATE_INT);
@@ -84,7 +84,7 @@ else if($action === 'delete_ref'){
 }
 
 //ADD REF ACTION
-else if($action === 'add_ref'){
+if($action === 'add_ref'){
 	trim_POST();
 	//get data fields
 	//NB id must come from POST, not GET
@@ -114,7 +114,7 @@ else if($action === 'add_ref'){
 }
 
 //EDIT ACTION
-else if($action === 'edit'){
+if($action === 'edit'){
 	trim_POST();
 	//get data fields
 	//NB id must come from POST, not GET
@@ -156,7 +156,7 @@ else if($action === 'edit'){
 }
 
 // DISPLAY
-else if($action === 'display'){
+if($action === 'display'){
 	// get excavation id from &_GET
 	$id = filter_input(INPUT_GET, 'id');
 	if($id === NULL){
@@ -202,10 +202,8 @@ else if($action === 'display'){
 	}
 }
 
-else {
-	$error_message = "Action unknown.";
-	include('../includes/error.php');
-	exit;
-}
+$error_message = "Action unknown.";
+include('../includes/error.php');
+exit;
 
 ?>

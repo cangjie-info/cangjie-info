@@ -20,6 +20,7 @@ echo $excavation['name_en'] . ' '
 <?php endforeach; ?>
 <hr />
 <!-- ADD NEW FORM -->
+<h2>Add new excavation:</h2>
 <form action="." method="post" id="add_form">
 <input type="hidden" name="action" value="add">
 <label>name (zh):</label>

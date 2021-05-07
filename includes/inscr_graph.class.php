@@ -13,12 +13,11 @@ class InscrGraph {
   const COLON = 512;
   const RIGHTINNERQUOTE = 1024;
   const RIGHTQUOTE = 2048;
-  const TAB = 4096; // (indent, for verse sections, etc.)
-  const NEWLINE = 8192; // (start new line, for verse sections, paragraphs in long prose passages or speeches, etc.)
+  const TAB = 4096; // (indent, for verse sections, etc. Prepunc.)
+  const NEWLINE = 8192; // (start new line, for verse sections, paragraphs in long prose passages or speeches, etc. Prepunc.)
   const SEMICOLON = 16384;
 
-// SENTENCEPUNC = [PERIOD, QUESTION, EXCLAMATION, COLON, SEMICOLON]
-
+  public $id;
   public $inscr_id;
   public $number_inscr;
   public $markup;
@@ -26,6 +25,11 @@ class InscrGraph {
   public $sentence_id;
   public $number_sentence;
   public $graph;
+  public $img_rot;
+  public $img_x;
+  public $img_y;
+  public $img_w;
+  public $img_h;
 
   public static function charToBit($char) {
     //returns the bit value if $char matches one of the punctuation marks
@@ -41,12 +45,12 @@ class InscrGraph {
     if ($char == ';' or $char == '；') return self::SEMICOLON;
     if ($char == ':' or $char == '：') return self::COLON; 
     if ($char == '’' or $char == '』') return self::RIGHTINNERQUOTE;
-    if ($char == '」' or $char == '”') return self::RIGHTQUOTE;
+	 if ($char == '」' or $char == '”') return self::RIGHTQUOTE;
     return 0;
   }
 
   public static function isPrepunc($char) {
-    //return true if string $mark is a prepunc character
+    //return true if string $char is a prepunc character
     if ($char == '“' or $char == '「' or $char == '‘' or $char == '『' or $char == '《') {
       return true;
     }
@@ -114,3 +118,4 @@ class InscrGraph {
     return $postpunc;
   }
 }
+?>

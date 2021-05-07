@@ -1,8 +1,9 @@
 <h1>
 <?php 
-echo $excavation['name_en'] . ' ' . $excavation['name_zh'] . ' (' . $excavation['year'] . ')';  
+	echo $excavation['name_en'] . ' ' . $excavation['name_zh'] . ' (' . $excavation['year'] . ')';  
 ?>
 </h1>
+
 <!-- EXCAVATION DETAILS -->
 <p>Lat = <?php echo $excavation['latitude'];?></p>
 <p>Long = <?php echo $excavation['longitude'];?></p>
@@ -13,15 +14,15 @@ echo $excavation['name_en'] . ' ' . $excavation['name_zh'] . ' (' . $excavation[
 <h2>Edit excavation data</h2>
 <p>Fields are initilized to current values. Edit and press 'Update' button. All fields must have values.</p>
 <form action="." method="post" id="edit_form">
-<input type="hidden" name="id" value="<?php echo $id; ?>">
-<input type="hidden" name="action" value="edit">
+	<input type="hidden" name="id" value="<?php echo $id; ?>">
+	<input type="hidden" name="action" value="edit">
 <?php 
-foreach($excavation as $key => $value){
+	foreach($excavation as $key => $value){
 ?>
-	<label><?php echo $key; ?>:</label>
-	<input type='text' name='<?php echo $key; ?>' value='<?php echo $value; ?>'>
+		<label><?php echo $key; ?>:</label>
+		<input type='text' name='<?php echo $key; ?>' value='<?php echo $value; ?>'>
 <?php } ?>
-<input type="submit" value="Update">
+	<input type="submit" value="Update">
 </form>
 
 <!-- CONTEXTS -->
@@ -29,36 +30,39 @@ foreach($excavation as $key => $value){
 <h2>Archeological contexts</h2>
 <!-- display contexts --> 
 <?php foreach($contexts as $context) { ?>
-<a href="../context/?id=<?php echo $context['id'];?>">
+	<a href="../context/?id=<?php echo $context['id'];?>">
 <?php
-	echo $context['name'] . ' (' . $context['context_type'] . ') '
-		. '"' . $context['description'] . '" ' . $context['date_early']
-		. '-' . $context['date_late'];
+		$date_string = rangeToBCE($context['date_early'], $context['date_late']);
+		echo $context['name'] . ' (' . $context['context_type'] . ') '
+			. '"' . $context['description'] . '" ' . $date_string;
 ?>
-</a>
+	</a>
 <form action="." method="post">
-<input type="hidden" name="action" value="delete_context">
-<input type="hidden" name="id" value="<?php echo $id; ?>">
-<input type="hidden" name="context_id" value="<?php echo $context['id']; ?>">
-<input type="submit" value="delete">
+	<input type="hidden" name="action" value="delete_context">
+	<input type="hidden" name="id" value="<?php echo $id; ?>">
+	<input type="hidden" name="context_id" value="<?php echo $context['id']; ?>">
+	<input type="submit" value="delete">
 </form>
 <br>
 <?php } ?>
 <!-- add context form -->
+<hr>
+<h2>Add archeological context to excavation record.</h2>
+<p>All fields must be completed.</p>
 <form action="." method="post">
-<input type="hidden" name="action" value="add_context">
-<input type="hidden" name="id" value="<?php echo $id; ?>">
-<label>Context name:</label>
-<input type="text" name="name">
-<label>Context type:</label>
-<input type="text" name="context_type">
-<label>Description:</label>
-<input type="text" name="description">
-<label>Date early:</label>
-<input type="text" name="date_early">
-<label>Date late:</label>
-<input type="text" name="date_late">
-<input type="submit" value="Add">
+	<input type="hidden" name="action" value="add_context">
+	<input type="hidden" name="id" value="<?php echo $id; ?>">
+	<label>Context name:</label>
+	<input type="text" name="name">
+	<label>Context type:</label>
+	<input type="text" name="context_type">
+	<label>Description:</label>
+	<input type="text" name="description">
+	<label>Date early:</label>
+	<input type="text" name="date_early">
+	<label>Date late:</label>
+	<input type="text" name="date_late">
+	<input type="submit" value="Add">
 </form>
 
 
@@ -75,10 +79,10 @@ foreach($excavation as $key => $value){
 	}
 ?>
 	<form action="." method="post">
-	<input type="hidden" name="action" value="delete_ref">
-	<input type="hidden" name="id" value="<?php echo $id; ?>">
-	<input type="hidden" name="ref_id" value="<?php echo $ref['id']; ?>">
-	<input type="submit" value="delete">
+		<input type="hidden" name="action" value="delete_ref">
+		<input type="hidden" name="id" value="<?php echo $id; ?>">
+		<input type="hidden" name="ref_id" value="<?php echo $ref['id']; ?>">
+		<input type="submit" value="delete">
 	</form>
 <?php
 	echo "<br>";

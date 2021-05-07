@@ -10,4 +10,5 @@ catch(PDOException $e) {
 	include('../includes/error.php');
 	exit();
 }
+$db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 ?>
