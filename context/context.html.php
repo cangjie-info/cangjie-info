@@ -5,14 +5,15 @@
 </h1>
 <!-- CONTEXT DETAILS -->
 <p><?php echo $context['description'];?></p>
-<p>Date: <?php echo $context['date_early'] . ' - ' . $context['date_late']; ?></p>
+<p>Date: <?php echo rangeToBCE($context['date_early'], $context['date_late']); ?></p>
 <p>Excavation: 
 <a href='../excavation/?id=<?php echo $context['arch_excavation_id']; ?>'>
 <?php echo $excavation['name_en'] . ' ' . $excavation['name_zh'] . ' (' . $excavation['year'] . ')'; ?>
 </a>
 </p>
-<!-- NEXT CONTEXT -->
-<!-- PREV CONTEXT -->
+
+<!-- TODO NEXT CONTEXT -->
+<!-- TODO PREV CONTEXT -->
 <!-- EDIT CONTEXT DETAILS -->
 <hr>
 <h2>Edit context data</h2>
@@ -49,6 +50,8 @@
 </br>
 <?php } ?>
 <!-- ADD NEW ARCH_OBJECT -->
+<hr>
+<h2> Add object to context</h2>
 <p>Add new archeological object to this context.</p>
 <form action="." method="post">
 	<input type="hidden" name="action" value="add_arch_object">
@@ -72,6 +75,6 @@ inscr_object, inscr_surf, and inscr:</label>
 	<input type="submit" name="add" value="Add">
 </form>
 	<!-- create inscr_object to go with it by default -->
-<!-- ASSOCIATED INSCR_OBJECTS -->
-<!-- ASSOCIATED INSCR_SURFS -->
-<!-- ASSOCIATED INSCRS -->
+<!-- TODO ASSOCIATED INSCR_OBJECTS -->
+<!-- TODO ASSOCIATED INSCR_SURFS -->
+<!-- TODO ASSOCIATED INSCRS -->

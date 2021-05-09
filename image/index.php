@@ -1,5 +1,13 @@
 <?php
 
+// Page to serve images from file system.
+// To insert image in page, use <img> tag with src pointing at this page.
+// POST variable table and id determine the right image for the identified row of the identified table.
+// Things to note: uses Imagick.
+// Rotations are clockwise in degrees, and enlarge image.
+// Geometry needs to be reset after the rotation for subseuqnet crop operations. 
+
+
 require_once('../includes/all_php.php');
 require_once('../includes/db.php');
 
@@ -32,8 +40,10 @@ case 'surface':
 	} 
 	else {
 		$image->rotateImage('white', intval($img_data['img_rot']));
+	// reset image geometry so that crop coordinates are correct. 
+	$image->setImagePage($image->getImageWidth(), $image->getImageHeight(), 0, 0);
 	}
-	if($img_data['img_x'] === null) {
+	if($img_data['img_h'] === '0') {
 		// do nothing
 	}
 	else {
@@ -43,6 +53,21 @@ case 'surface':
 		$y = $img_data['img_y'];
 		$image->cropImage($w, $h, $x, $y);
 	}
+	break;
+case 'surface_img':
+	$qry = 'SELECT path FROM imgs '
+		. 'INNER JOIN inscr_surfaces ON imgs.id=img_id '
+		. 'WHERE inscr_surfaces.id=:id';
+	$stmt = $db->prepare($qry);
+	$stmt->bindValue(':id', $id);
+	$stmt->execute();
+	$result = $stmt->fetchColumn();
+	if($result === false){
+		$error_message = 'No img with that id.';
+		include('../includes/error.php');
+		exit;
+	}
+	$image = new Imagick('http://localhost/IMGS/' . $result . '.jpg');
 	break;
 case 'img':
 	$qry = 'SELECT path FROM imgs WHERE id=:id;';

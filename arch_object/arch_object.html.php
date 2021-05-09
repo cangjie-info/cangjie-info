@@ -1,5 +1,4 @@
 <h1>Archeological object</h1>
-
 <p>
 	<a href='../excavation/?id=<?php echo $object['excavation_id']; ?>'>
 	<?php echo $object['excavation_en'] . ' ' . $object['excavation_zh'] . ' (' . $object['year'] . ') '; ?>
@@ -9,6 +8,21 @@
 	</a>
 	<?php echo $object['object_name']; ?>
 </p>
+<hr>
+<h2>Edit archeologcial object properties</h2>
+<p>Fields are initialized to current values. Edit and press 'Update' button.</p>
+<form action="." method="post">
+	<input type="hidden" name="id" value="<?php echo $id; ?>">
+	<input type="hidden" name="action" value="edit">
+	<label>Archeological object name:</label>
+	<input type="text" name="name" value="<?php echo $object['object_name']; ?>">
+	<label>Early date:</label>
+	<input type="text" name="date_early" value="<?php echo $object['date_early']; ?>">
+	<label>Late date:</label>
+	<input type="text" name="date_late" value="<?php echo $object['date_late']; ?>">
+	<input type="submit" value="Update">
+</form>
+<hr>
 
 <h2>
 	<a href='../inscr_object/?id=<?php echo $inscr_object['id']; ?>'>

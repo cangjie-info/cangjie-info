@@ -1,15 +1,17 @@
 <h1>Inscribed object: 
-<?php echo $object['name'] . ' (' . $object['type'] . ')'; ?>
+	<?php echo $object['name'] . ' (' . $object['type'] . ')'; ?>
 </h1>
+<hr>
 <h2>Edit:</h2>
+<p>Fields are populated with current values. Edit as needed and then press Update.</p>
 <form method='post' action='.'>
-<input type='hidden' name='id' value='<?php echo $id; ?>'>
-<input type='hidden' name='action' value='edit'>
-<label>name</label>
-<input type='text' name='name'>
-<label>type</label>
-<input type='text' name='type'>
-<input type='submit' value='Submit'>
+	<input type='hidden' name='id' value='<?php echo $id; ?>'>
+	<input type='hidden' name='action' value='edit'>
+	<label>name</label>
+	<input type='text' name='name' value='<?php echo $object['name']; ?>'>
+	<label>type</label>
+	<input type='text' name='type' value='<?php echo $object['type']; ?>'>
+	<input type='submit' value='Submit'>
 </form>
 <h2>Archeological objects:</h2>
 <?php foreach($arch_objects as $object){?>

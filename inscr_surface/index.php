@@ -11,7 +11,7 @@ if($action === NULL){
 }
 
 // ADD INSCRIPTION TEXT
-if($action === 'add_inscr_text') {
+if($action == 'add_inscr_text') {
 	$surf_id = filter_input(INPUT_POST, 'surf_id', FILTER_VALIDATE_INT);
 	$inscr_id = filter_input(INPUT_POST, 'inscr_id', FILTER_VALIDATE_INT);
 	$text = filter_input(INPUT_POST, 'text', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -65,7 +65,7 @@ if($action === 'add_inscr_text') {
 }
 
 // EDIT ACTION
-if($action === 'edit'){
+if($action == 'edit'){
 	$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 	$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
 	$img_rot = filter_input(INPUT_POST, 'img_rot', FILTER_VALIDATE_INT);
@@ -90,7 +90,7 @@ if($action === 'edit'){
 }
 
 // DISPLAY ACTION
-if($action === 'display'){
+if($action == 'display'){
 	$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 	if($id === null){
 		$error_message = 'Need an integer id.';

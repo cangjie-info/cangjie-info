@@ -1,7 +1,9 @@
 <h1>Inscribed surface:
 <?php echo $surface['name'];?>
 </h1>
+<hr>
 <h2>Edit:</h2>
+<p>Fields are populated with current values. Edit as necessary and press "Update".</p> 
 <form method='post' action='.'>
 	<input type='hidden' name='id' value='<?php echo $surface['id'];?>'>
 	<input type='hidden' name='action' value='edit'>
@@ -17,10 +19,16 @@
 	<input type='text' name='img_w' value='<?php echo $w; ?>'>
 	<label>img_h</label>
 	<input type='text' name='img_h' value='<?php echo $h; ?>'>
-	<input type='submit' value='Submit'>
+	<input type='submit' value='Update'>
 </form>
+<hr>
 <p><a href='../inscr_object/?id=<?php echo $surface['inscr_object_id']; ?>'>RETURN TO INSCRIBED OBJECT</a></p>
+<hr>
 <img src='../image/?table=surface&id=<?php echo $surface['id'];?>'>
+<p>
+	<a href='../image/?table=surface_img&id=<?php echo $surface['id'];?>'>LINK TO PAGE IMAGE</a>
+</p>
+<hr>
 <?php foreach($inscriptions as $key => $inscription): ?>
 <p>Inscription #<?php echo $key; ?></p>
 <form method='post' action='.'>

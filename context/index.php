@@ -6,30 +6,12 @@ require_once('../includes/db.php');
 // get action from $_POST variable
 $action = filter_input(INPUT_POST, 'action');
 // default to "display"
-if($action === NULL){
+if($action == NULL){
 	$action = "display";
 }
-/*
-// ADD ACTION
-if($action == "add"){
-	trim_POST();
-	// get data fields
-	// validate input
-	if (not valid) {
-		$error_message = "Invalid excavation data.";
-		include('../includes/error.php');
-		exit;
-	}
-	else {
-		$query = 'INSERT INTO etc. etc.';
-		header('location: .');
-		exit;
-	}
-}
- */
 
 // ADD ARCH_OBJECT ACTION
-if($action === 'add_arch_object'){
+if($action == 'add_arch_object'){
 	trim_POST();
 	$context_id = filter_input(INPUT_POST, 'context_id', FILTER_VALIDATE_INT);
 	$arch_object_name = filter_input(INPUT_POST, 'arch_object_name', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -37,6 +19,7 @@ if($action === 'add_arch_object'){
 	$inscr_object_id = filter_input(INPUT_POST, 'inscr_object_id', FILTER_VALIDATE_INT);
 	$inscr_object_type = filter_input(INPUT_POST, 'inscr_object_type', FILTER_SANITIZE_SPECIAL_CHARS);
 	$surf_name = filter_input(INPUT_POST, 'surf_name', FILTER_SANITIZE_SPECIAL_CHARS);
+	// TODO wrap this in a transaction and handle errors.
 	if(isset($_POST['add_inscr'])) {
 		$qry = 'INSERT INTO inscr_objects (name, object_type) VALUES (:name, :object_type);';
 		$stmt = $db->prepare($qry);
@@ -69,7 +52,8 @@ if($action === 'add_arch_object'){
 }
 
 // DELETE ARCH_OBJECT ACTION
-else if($action === 'delete_arch_object'){
+// TODO catch attempts to delete arch_object with associated inscr_object?
+if($action == 'delete_arch_object'){
 	$context_id = filter_input(INPUT_POST, 'context_id', FILTER_VALIDATE_INT);
 	$object_id = filter_input(INPUT_POST, 'object_id', FILTER_VALIDATE_INT);
 	$qry = 'DELETE FROM arch_objects WHERE id=:id';
@@ -81,7 +65,7 @@ else if($action === 'delete_arch_object'){
 }
 
 // EDIT ACTION
-else if($action === 'edit'){
+if($action == 'edit'){
 	trim_POST();
 	// get data fields
 	$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
@@ -118,7 +102,7 @@ else if($action === 'edit'){
 }
 
 // DISPLAY ACTION
-else if($action == "display"){
+if($action == "display"){
 	$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 	if($id === NULL){
 		$error_message = 'Need an integer id for context.';

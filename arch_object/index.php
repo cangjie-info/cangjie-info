@@ -8,11 +8,41 @@ if($action === NULL){
 	$action = 'display';
 }
 
-if($action === 'do somthing') {
+// EDIT ACTION
+if($action == 'edit') {
+	trim_POST();
+	// get data fields
+	$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+	$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
+	$date_early = filter_input(INPUT_POST, 'date_early', FILTER_VALIDATE_INT);
+	$date_late = filter_input(INPUT_POST, 'date_late', FILTER_VALIDATE_INT);
+	if($name == null || $name == ''){
+		$error_message = "Invalid name";
+		include('../includes/error.php');
+		exit;
+	}
+	if($date_early === false) {
+		$date_early = 'NULL';
+	}
+	if($date_late === false) {
+		$date_late = 'NULL';
+	}
+	$qry = 'UPDATE arch_objects '
+		. 'SET name=:name, date_early=:date_early, '
+		. 'date_late=:date_late '
+		. 'WHERE id=:id;';
+	$stmt = $db->prepare($qry);
+	$stmt->bindValue(':name', $name);
+	$stmt->bindValue(':date_early', $date_early);
+	$stmt->bindValue(':date_late', $date_late);
+	$stmt->bindValue(':id', $id);
+	$stmt->execute();
+	header('location: .' . "?id=$id");
+	exit;
 }
 
 // DISPLAY ACTION
-else if($action === 'display'){
+if($action == 'display'){
 	$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 	if($id === NULL){
 		$error_message = 'Need an integer id.';
@@ -26,6 +56,8 @@ else if($action === 'display'){
 					. 'arch_contexts.name AS context_name, '
 					. 'arch_contexts.id AS context_id, '
 					. 'arch_objects.name AS object_name, '
+					. 'arch_objects.date_early AS date_early, '
+					. 'arch_objects.date_late AS date_late, '
 					. 'arch_objects.inscr_object_id AS inscr_object_id '
 					. 'FROM arch_objects '
 					. 'INNER JOIN arch_contexts ON arch_contexts.id = arch_context_id '

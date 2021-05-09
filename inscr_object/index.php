@@ -4,11 +4,11 @@ require_once('../includes/all_php.php');
 require_once('../includes/db.php');
 
 $action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_SPECIAL_CHARS);
-if($action === NULL){
+if($action == NULL){
 	$action = 'display';
 }
 
-if($action === 'edit') {
+if($action == 'edit') {
 	trim_POST();
 	$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 	$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -30,7 +30,7 @@ if($action === 'edit') {
 	exit();
 }
 
-else if($action === 'add_surf') {
+if($action == 'add_surf') {
 	trim_POST();
 	$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 	$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -57,7 +57,7 @@ else if($action === 'add_surf') {
 }
 
 // DISPLAY ACTION
-else if($action === 'display'){
+if($action == 'display'){
 	$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 	if($id === NULL){
 		$error_message = 'Need an integer id.';
