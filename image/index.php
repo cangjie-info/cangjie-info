@@ -67,7 +67,7 @@ case 'surface_img':
 		include('../includes/error.php');
 		exit;
 	}
-	$image = new Imagick('http://localhost/IMGS/' . $result . '.jpg');
+	$image = new Imagick('../../IMGS/' . $result . '.jpg');
 	break;
 case 'img':
 	$qry = 'SELECT path FROM imgs WHERE id=:id;';
@@ -80,7 +80,7 @@ case 'img':
 		include('../includes/error.php');
 		exit;
 	}
-	$image = new Imagick('http://localhost/IMGS/' . $result . '.jpg');
+	$image = new Imagick('../../IMGS/' . $result . '.jpg');
 	break;
 case 'surface':
 	break;
