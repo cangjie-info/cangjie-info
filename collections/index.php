@@ -1,6 +1,7 @@
 <?php
 
 require_once('../includes/all_php.php');
+require_once('../includes/db.php');
 require_once('../includes/txt_collection.class.php');
 
 $collections = TxtCollection::getAllCollections();

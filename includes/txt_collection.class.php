@@ -1,8 +1,5 @@
 <?php
 
-// require_once('../includes/txt_subcollection.class.php');
-require_once('../includes/db.php');
-
 class TxtCollection {
   public int $id = 0;
   public string $short_name;

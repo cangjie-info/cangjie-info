@@ -5,8 +5,9 @@
   ' ' . $subcollection->name_zh; ?></h1>
 
 <?php foreach($subcollection->narratives as $narrative) : ?>
-<p><a href="../narrative/?id=<?php echo $narrative->id; ?>"/>
-<?php echo $narrative->toString(); ?>
-</a>
-</p>
+	<p>
+		<a href="../narrative/?id=<?php echo $narrative->id; ?>"/>
+			<?php echo $narrative->getIncipit()->toString(); ?>
+		</a>
+	</p>
 <?php endforeach; ?>
