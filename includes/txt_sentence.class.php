@@ -1,15 +1,29 @@
 <?php
 
-require_once('inscr_graph.class.php');
-
 class TxtSentence {
-  public $id;
-  public $narrative_id;
-  public $number;
-  public $next_id; // next sentence in same narrative, false if none
-  public $prev_id; // prev sentence in same narrative, false if none
-  public $graphs = array();
+   public int $id;
+   public int $narrative_id;
+   public int $number;
+   public int $next_id; // next sentence in same narrative, 0 if none
+   public int $prev_id; // prev sentence in same narrative, 0 if none
+   public $graphs = array();
 
+   public function appendGraphs() {
+      global $db;
+      $qry= 'SELECT inscr_id, number_inscr, '
+         . 'markup, punc, sentence_id, number_sentence, graph '
+         . 'FROM txt_sentences '
+         . 'INNER JOIN inscr_graphs '
+         . 'ON txt_sentences.id=sentence_id '
+         . 'WHERE txt_sentences.id=:id '
+         . 'ORDER BY number_sentence;';
+      $stmt= $db->prepare($qry);
+      $stmt->bindValue(':id', $this->id);
+      $stmt->execute();
+      while($graph = $stmt->fetchObject('InscrGraph')) {
+          $this->appendGraph($graph);
+      }
+   }
 
   public function appendGraph(InscrGraph $graph) {
     $this->graphs[] = $graph;
@@ -26,6 +40,4 @@ class TxtSentence {
     }
     return $sentence_string;
   }
-
 }
-
