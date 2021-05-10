@@ -17,19 +17,19 @@ class InscrGraph {
   const NEWLINE = 8192; // (start new line, for verse sections, paragraphs in long prose passages or speeches, etc. Prepunc.)
   const SEMICOLON = 16384;
 
-  public $id;
-  public $inscr_id;
+  public int $id = 0;
+  public $inscr_id = 0;
   public $number_inscr;
-  public $markup;
-  public $punc;
-  public $sentence_id;
-  public $number_sentence;
-  public $graph;
-  public $img_rot;
-  public $img_x;
-  public $img_y;
-  public $img_w;
-  public $img_h;
+  public int $markup;
+  public int $punc;
+  public $sentence_id = 0;
+  public int $number_sentence;
+  public string $graph;
+  public int $img_rot = 0;
+  public int $img_x = 0;
+  public int $img_y = 0;
+  public int $img_w = 0;
+  public int $img_h = 0;
 
   public static function charToBit($char) {
     //returns the bit value if $char matches one of the punctuation marks
@@ -118,4 +118,3 @@ class InscrGraph {
     return $postpunc;
   }
 }
-?>

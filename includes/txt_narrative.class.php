@@ -6,8 +6,8 @@ class TxtNarrative {
    public string $name_en;
    public string $name_zh;
    public int $number = 0;
-   public int $next_id = 0; // id of next narrative in subcollection
-   public int $prev_id = 0; // id of prev narrative
+   public int $next_id = 0; // id of next narrative in subcollection, 0 if none.
+   public int $prev_id = 0; // id of prev narrative, 0 if none.
    public $sentences = array();
 
    public static function getById(int $id) {

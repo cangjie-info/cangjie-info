@@ -1,18 +1,14 @@
 <?php
 
 class Inscr {
-	// db fields
-	private $id;
-	private $inscr_surface_id;
-	private $img_rot;
-	private $img_x;
-	private $img_y;
-	private $img_w;
-	private $img_h;
+	private int $id = 0;
+	private int $inscr_surface_id = 0;
+	private int $img_rot = 0;
+	private int $img_x = 0;
+	private int $img_y = 0;
+	private int $img_w = 0;
+	private int $img_h = 0;
 	private $name;
 
 	private $graph_list;
-	// private $dirty
 }
-
-?>
