@@ -1,11 +1,13 @@
 <?php
 
 class TxtNarrative {
+   // DB table fields
    public int $id = 0;
    public int $subcollection_id = 0;
    public string $name_en;
    public string $name_zh;
    public int $number = 0;
+   // Not DB table fields
    public int $next_id = 0; // id of next narrative in subcollection, 0 if none.
    public int $prev_id = 0; // id of prev narrative, 0 if none.
    public $sentences = array();
@@ -17,14 +19,27 @@ class TxtNarrative {
       $stmt->bindValue(':id', $id);
       $stmt->execute();
       $narrative = $stmt->fetchObject('TxtNarrative');
-      if(!isset($narrative->id)) { // if no narrative corresponds to id
+      if(!$narrative) { // if no narrative corresponds to id
          exit('no narrative with that id');
       }
       return $narrative;
    }
 
+   public function insert() {
+      global $db;
+      $qry = 'INSERT INTO txt_narratives (subcollection_id, name_zh, name_en, number) '
+         . 'VALUES (:subcollection_id, :name_zh, :name_en, :number);';
+      $stmt = $db->prepare($qry);
+      $stmt->bindValue(':subcollection_id', $this->subcollection_id);
+      $stmt->bindValue(':name_zh', $this->name_zh);
+      $stmt->bindValue(':name_en', $this->name_en);
+      $stmt->bindValue(':number', $this->number);
+      $stmt->execute();
+      $this->id = $db->lastInsertId();
+   }
+
    public function appendSentencesGraphs() {
-      // TODO THIS IS NOT EFFICIENT - separate query for each sentence.
+      // TODO THIS IS NOT EFFICIENT - uses separate query for each sentence.
       global $db;
       $qry= 'SELECT txt_sentences.id, narrative_id, txt_sentences.number FROM txt_sentences '
          . 'INNER JOIN txt_narratives ON txt_sentences.narrative_id = txt_narratives.id '

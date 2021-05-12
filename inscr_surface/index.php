@@ -16,52 +16,12 @@ if($action == 'add_inscr_text') {
 	$inscr_id = filter_input(INPUT_POST, 'inscr_id', FILTER_VALIDATE_INT);
 	$text = filter_input(INPUT_POST, 'text', FILTER_SANITIZE_SPECIAL_CHARS);
 	echo $text;
-	$chars = mb_str_split($text);
-	$inscr_graphs = array();
-	$current_graph = new InscrGraph;
-	$previous_graph = new InscrGraph;
-	$inside_braces = false;
-	foreach($chars as $char){
-		if($char === ' ' || $char === "\n" || $char === "\r" || $char === "\t") {
-			// ignore whitespace
-		}
-		else if($char === '{') {
-			$inside_braces = true;
-		}
-		else if($inside_braces === false && InscrGraph::isPostPunc($char)) {
-			$previous_graph->punc |= InscrGraph::charToBit($char);
-		}
-		else if($inside_braces === false && InscrGraph::isPrePunc($char)) {
-			$current_graph->punc|=InscrGraph::charToBit($char);
-		}
-		else if($char === '}') {
-			$inside_braces = false;
-			if($previous_graph->graph) {
-				$inscr_graphs[] = $previous_graph;
-			}
-			$previous_graph = $current_graph;
-			$current_graph = new InscrGraph;
-		}
-		else if($inside_braces) {
-			$current_graph->graph .= $char;
-		}
-		else { // just a graph
-			$current_graph->graph = $char;
-			if($previous_graph->graph) {
-				$inscr_graphs[] = $previous_graph;
-			}
-			$previous_graph = $current_graph;
-			$current_graph = new InscrGraph;
-		}
-	}
-	if($previous_graph->graph) {
-		$inscr_graphs[] = $previous_graph;
-	}
+   $inscr_graphs = InscrGraph::stringToInscrGraphs($text);
 	foreach($inscr_graphs as $graph){
-		echo $graph->toString();
+		echo "<br>" . $graph->toString();
 	}
 	var_dump($inscr_graphs);
-	exit;
+   exit;
 }
 
 // EDIT ACTION
@@ -124,4 +84,5 @@ if($action == 'display'){
 	require_once('../includes/all_html_bottom.html.php');
 	exit;
 }
-?>
+
+

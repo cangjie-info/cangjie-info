@@ -2,8 +2,8 @@
 
 class TxtSentence {
    public int $id = 0;
-   public int $narrative_id;
-   public int $number;
+   public int $narrative_id = 0;
+   public int $number = 0;
    public int $next_id = 0; // next sentence in same narrative, 0 if none
    public int $prev_id = 0; // prev sentence in same narrative, 0 if none
    public $graphs = array();
@@ -21,7 +21,44 @@ class TxtSentence {
       return $sentence;
    }
 
-   public function appendGraphs() {
+   public function insert() {
+      // inserts TxtSentence into db txt_sentences table, and
+      // inserts all its InscrGraphs into the inscr_graphs table.
+      // the latter is a single insert, and so no usable insert id can be retrieved.
+      // TODO protect against injeciton, and accidental use of quotes in graph string.
+      // TODO separate graph insertion
+      // TODO creat mechansm to insert all graphs (or sentences, etc.) from an entire collection in a single INSERT
+      global $db;
+      $qry = 'INSERT INTO txt_sentences (narrative_id, number) '
+         . 'VALUES (:narrative_id, :number);';
+      $stmt = $db->prepare($qry);
+      $stmt->bindValue(':narrative_id', $this->narrative_id);
+      $stmt->bindValue(':number', $this->number);
+      $stmt->execute();
+      $this->id = $db->lastInsertId();
+      $qry = 'INSERT INTO inscr_graphs (inscr_id, number_inscr, markup, punc, sentence_id, '
+         . 'number_sentence, graph) '
+         . 'VALUES ';
+      $first = true;
+      foreach($this->graphs as $graph){
+         if(!$first){
+            $qry .= ', ';
+         }
+         $qry .= '( NULL, '
+            . 'NULL, '
+            . $graph->markup . ', '
+            . $graph->punc . ', '
+            . $this->id . ', ' // TODO hacky
+            . $graph->number_sentence . ', '
+            . '"' . $graph->graph . '")';
+         $first = false;
+      }
+      $qry .= ';';
+      $stmt = $db->prepare($qry);
+      $stmt->execute();
+   }
+
+   public function appendGraphs() { //shit name -> appendGraphsFromDb
       global $db;
       $qry= 'SELECT inscr_id, number_inscr, '
          . 'markup, punc, sentence_id, number_sentence, graph '
@@ -39,6 +76,7 @@ class TxtSentence {
    }
 
    public function appendGraph(InscrGraph $graph) {
+      $graph->sentence_id = $this->id;
       $this->graphs[] = $graph;
    }
    

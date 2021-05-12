@@ -1,9 +1,9 @@
-<!-- The data encoding type, enctype, MUST be specified as below -->
+<h1>Text data file upload</h1>
+<p>Click on Browse... button to find the local file to be uploaded, then click Upload button.
+Filetype must be of type "text/plain", with a maximum size of <?php echo $max_file_size; ?>.</p>
 <form enctype="multipart/form-data" action="." method="POST">
-   <!-- MAX_FILE_SIZE must precede the file input field -->
-   <input type="hidden" name="MAX_FILE_SIZE" value="3000000" />
+<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $max_file_size;?>">
    <input type="hidden" name="action" value="uploaded">
-   <!-- Name of input element determines name in $_FILES array -->
-   Send this file: <input name="userfile" type="file" />
-   <input type="submit" value="Send File" />
+   Upload this file: <input name="userfile" type="file">
+   <input type="submit" value="Upload">
 </form>
