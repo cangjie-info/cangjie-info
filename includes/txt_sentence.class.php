@@ -77,6 +77,7 @@ class TxtSentence {
 
    public function appendGraph(InscrGraph $graph) {
       $graph->sentence_id = $this->id;
+      $graph->number_sentence = count($this->graphs) + 1;
       $this->graphs[] = $graph;
    }
    

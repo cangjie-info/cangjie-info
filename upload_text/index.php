@@ -45,16 +45,14 @@ if($action == 'uploaded'){
 }
 
 function process_upload($temp){
-   // delete existing Lunyu
-   $collection = TxtCollection::getByShortName('LY');
-   $collection->delete();
-   // 
    $file = fopen($temp, 'r');
    $collection = null;
    $subcollection = null;
    $narrative = null;
    $sentence = null;
    $line_number = 0;
+   global $db;
+   $db->beginTransaction();
    while(($line = fgets($file)) !== false) {
       $line_number++;
       // remember htmlentitites(), etc.
@@ -72,13 +70,15 @@ function process_upload($temp){
          switch($object) {
          case 'collection':
             $collection = new TxtCollection;
+            if(count($values) != 3) {
+               exit("Three values required at line $line_number.");
+            }
             $collection->short_name = $values[0];
             $collection->name_zh = $values[1];
             $collection->name_en = $values[2];
             $collection->insert();
             $subcollection = null;
             $narrative = null;
-            echo "<hr>$collection->id:$collection->name_zh";
             break;
          case 'subcollection':
             if(!$collection) {
@@ -94,6 +94,9 @@ function process_upload($temp){
             }
             $subcollection = new TxtSubcollection;
             $subcollection->collection_id = $collection->id;
+            if(count($values) != 2) {
+               exit("Two values required at line $line_number.");
+            }
             $subcollection->name_zh = $values[0];
             $subcollection->name_en = $values[1];
             $subcollection->number = $number;
@@ -114,12 +117,16 @@ function process_upload($temp){
             }
             $narrative = new TxtNarrative;
             $narrative->subcollection_id = $subcollection->id;
+            if(count($values) != 2) {
+               exit("Two values required at line $line_number.");
+            }
             $narrative->name_zh = $values[0];
             $narrative->name_en = $values[1];
             $narrative->number = $number;
             $narrative->insert();
             break;
          default:
+            exit("Command not recognized at line $line_number.");
             break;
          }
       }
@@ -128,8 +135,7 @@ function process_upload($temp){
       }
       else { // this is a text line, with no @ command.
          if(!$narrative) {
-            echo "No narrative at line $line_number.";
-            exit;
+            exit("No narrative at line $line_number.");
          }
          if(!$sentence) { // only executes once? Check! TODO
             $sentence = new TxtSentence;
@@ -151,45 +157,14 @@ function process_upload($temp){
    if($sentence and $sentence->getLength() > 0) {
       $sentence->insert();
    }
+   $db->commit();
    fclose($file);
    exit;
-      // @collection:short_name/name_zh/name_en
-      // @collection=id
-      //    flush remaining sentence if narrative id is set
-      //    insert collection if not exsists
-      //    reset subcollection and narrative and sentence counts (to zero, or to append)
-      //    next line must be subcollection.
-      // @subcollection:name_zh/name_en
-      //    flush remaining sentence
-      //    insert subcollection if not exsists
-      //    reset narrative and sentence counts (to zero or to append).
-      //    next line must be narrative
-      // @narrative:name_zh/name_en
-      //    flush remaining sentence
-      //    insert narrative
-      //    reset sentence count
+   // TODO
       // @excavation:
-      //    flush remaining inscription if set
-      //    insert excavation if not exists
-      //    reset context and object and surface and inscr counts (to zero or to append)
-      //    next line must be context
       // @context:
-      //    flush remaining inscription if set
-      //    insert context if not exsists
-      //    reset object and surface and inscr counts (to zero or to append)
-      //    next line must be object
       // @object: // assume arch and inscr are one
-      //    etc
       // @surface:
-      //    etc
       // @inscr:
-      //    etc.
       // @museums:
-      //    etc.
-      // 
-      // running text
-      //    assemble sentence object and write to 
-      // EOF
-      //  flush remaining sentence 
-      //  flush remaining inscription
 }

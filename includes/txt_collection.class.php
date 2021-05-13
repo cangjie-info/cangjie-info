@@ -14,9 +14,6 @@ class TxtCollection {
       $stmt->bindValue(':id', $id);
       $stmt->execute();
       $collection = $stmt->fetchObject('TxtCollection');
-      if(!$collection) { // if no collection corresponds to that id ....
-         exit('no collection for that id');
-      }
       return $collection;
    }
 
@@ -29,9 +26,6 @@ class TxtCollection {
       $stmt->bindValue(':short_name', $short_name);
       $stmt->execute();
       $collection = $stmt->fetchObject('TxtCollection');
-      if(!$collection) {
-         exit('no collections with that short name.');
-      }
       return $collection;
    }
 
@@ -97,7 +91,7 @@ class TxtCollection {
       $this->id = $db->lastInsertId();
    }
 
-   public function appendSubcollections() {
+   public function appendSubcollections() { // TODO rename.
       global $db;
       $qry= 'SELECT id, name_en, name_zh ' .
          'FROM txt_subcollections ' .
@@ -112,7 +106,8 @@ class TxtCollection {
    }
 
   public function appendSubcollection(TxtSubcollection $subcollection) {
-    $this->subcollections[] = $subcollection;
+     $subcollection->number = count($this->subcollections) + 1;
+     $this->subcollections[] = $subcollection;
   }
 
   public static function getAllCollections() {

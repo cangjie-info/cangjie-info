@@ -46,6 +46,7 @@ class TxtSubcollection {
 	}
 
 	public function appendNarrative(TxtNarrative $narrative) {
+      // TODO set number (naah this is not a good method - doesn't need to be stored.)
 		$this->narratives[] = $narrative;
 	}
 	
