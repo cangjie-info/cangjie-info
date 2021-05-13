@@ -18,7 +18,7 @@ if($action === NULL) {
 }
 
 if($action == 'display_upload_form'){
-   $max_file_size = 100000;
+   $max_file_size = 10000000;
    require_once('../includes/all_html_top.html.php');
    require_once('upload_form.html.php');
    require_once('../includes/all_html_bottom.html.php');
