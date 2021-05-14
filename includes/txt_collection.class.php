@@ -118,4 +118,20 @@ class TxtCollection {
      $stmt->execute();
      return $stmt->fetchAll(PDO::FETCH_CLASS, 'TxtCollection');
   }
+   public function countGraphs() {
+      global $db;
+      $qry = 'SELECT '
+         . 'COUNT(inscr_graphs.graph) AS count, '
+         . 'COUNT(DISTINCT inscr_graphs.graph) AS countDistinct '
+         . 'FROM txt_collections '
+         . 'INNER JOIN txt_subcollections ON txt_subcollections.collection_id = txt_collections.id '
+         . 'INNER JOIN txt_narratives ON txt_subcollections.id = txt_narratives.subcollection_id '
+         . 'INNER JOIN txt_sentences ON txt_sentences.narrative_id = txt_narratives.id '
+         . 'INNER JOIN inscr_graphs ON txt_sentences.id = inscr_graphs.sentence_id '
+         . 'WHERE txt_collections.id = :id;';
+      $stmt = $db->prepare($qry);
+      $stmt->bindValue(':id', $this->id);
+      $stmt->execute();
+      return $stmt->fetch(PDO::FETCH_ASSOC);
+   }
 }
