@@ -12,7 +12,9 @@ if($action == NULL) {
 }
 
 if($action == 'search_form') {
+   require_once('../includes/all_html_top.html.php');
    include('search_form.html');
+   require_once('../includes/all_html_bottom.html.php');
    exit;
 }
 
@@ -28,7 +30,9 @@ if($action == 'search') {
    }
    $search->target_graph = $target;
    $search->doSearch();
+   require_once('../includes/all_html_top.html.php');
    include('result.html.php');
+   require_once('../includes/all_html_bottom.html.php');
    exit;
 }
 

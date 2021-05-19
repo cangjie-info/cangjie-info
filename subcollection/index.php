@@ -9,8 +9,9 @@ require_once('../includes/inscr_graph.class.php');
 
 $id = getFilteredId();
   
-$subcollection = TxtSubcollection::getById($id);
-$subcollection->appendNarratives();
+$subcollection = new TxtSubcollection;
+$subcollection->setById($id);
+$subcollection->appendNarrativesFromDb();
 
 require_once('../includes/all_html_top.html.php');
 require_once('subcollection.html.php');

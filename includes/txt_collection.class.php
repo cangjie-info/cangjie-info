@@ -7,26 +7,25 @@ class TxtCollection {
    public string $name_en;
    public $subcollections = array();
 
-   public static function getById(int $id) {
+   public function setById(int $id) {
       global $db;
       $qry = 'SELECT * FROM txt_collections WHERE id=:id;';
       $stmt = $db->prepare($qry);
       $stmt->bindValue(':id', $id);
+      $stmt->setFetchMode(PDO::FETCH_INTO, $this);
       $stmt->execute();
-      $collection = $stmt->fetchObject('TxtCollection');
-      return $collection;
+      $stmt->fetch();
    }
 
-   public static function getByShortName(string $short_name) {
+   public static function setByShortName(string $short_name) {
       global $db;
       $qry = 'SELECT * FROM txt_collections '
          . 'WHERE short_name = :short_name;';
-
       $stmt = $db->prepare($qry);
       $stmt->bindValue(':short_name', $short_name);
+      $stmt->setFetchMode(PDO::FETCH_INTO, $this);
       $stmt->execute();
-      $collection = $stmt->fetchObject('TxtCollection');
-      return $collection;
+      $stmt->fetch();
    }
 
    public function delete() {
@@ -91,7 +90,7 @@ class TxtCollection {
       $this->id = $db->lastInsertId();
    }
 
-   public function appendSubcollections() { // TODO rename.
+   public function appendSubcollectionsFromDb() {
       global $db;
       $qry= 'SELECT id, name_en, name_zh ' .
          'FROM txt_subcollections ' .

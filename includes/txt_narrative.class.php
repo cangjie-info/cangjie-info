@@ -12,17 +12,14 @@ class TxtNarrative {
    public int $prev_id = 0; // id of prev narrative, 0 if none.
    public $sentences = array();
 
-   public static function getById(int $id) {
+   public function setById(int $id) {
       global $db;
       $qry= 'SELECT * FROM txt_narratives WHERE id=:id;';
       $stmt= $db->prepare($qry);
       $stmt->bindValue(':id', $id);
+      $stmt->setFetchMode(PDO::FETCH_INTO, $this);
       $stmt->execute();
-      $narrative = $stmt->fetchObject('TxtNarrative');
-      if(!$narrative) { // if no narrative corresponds to id
-         exit('no narrative with that id');
-      }
-      return $narrative;
+      $stmt->fetch();
    }
 
    public function insert() {
@@ -38,7 +35,7 @@ class TxtNarrative {
       $this->id = $db->lastInsertId();
    }
 
-   public function appendSentencesGraphs() {
+   public function appendSentencesGraphsFromDb() {
       // TODO THIS IS NOT EFFICIENT - uses separate query for each sentence.
       global $db;
       $qry= 'SELECT txt_sentences.id, narrative_id, txt_sentences.number FROM txt_sentences '
@@ -50,12 +47,12 @@ class TxtNarrative {
       $stmt->execute();
       $this->sentences = $stmt->fetchAll(PDO::FETCH_CLASS, 'TxtSentence');
       foreach($this->sentences as $sentence) {
-         $sentence->appendGraphs();
+         $sentence->appendGraphsFromDb();
       }
    }
 
    public function setNextPrevId() {
-      $this->setNextId();
+      $this->setNextId(); // TODO refactor to use just one function
       $this->setPrevId();
    }
 

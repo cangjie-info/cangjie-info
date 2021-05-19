@@ -3,20 +3,37 @@
 class TxtSentence {
    public int $id = 0;
    public int $narrative_id = 0;
-   public int $number = 0;
+   public int $number = 0; // number in narrative
    public int $next_id = 0; // next sentence in same narrative, 0 if none
    public int $prev_id = 0; // prev sentence in same narrative, 0 if none
    public $graphs = array();
 
-   public static function getById(int $id) {
+   public function setById(int $id) {
       global $db;
       $qry= 'SELECT * FROM txt_sentences WHERE id=:id;';
       $stmt= $db->prepare($qry);
       $stmt->bindValue(':id', $id);
+      $stmt->setFetchMode(PDO::FETCH_INTO, $this);
       $stmt->execute();
-      $sentence = $stmt->fetchObject('TxtSentence');
-      if(!isset($sentence->id)) {
-        exit('no sentence with that id');
+      $stmt->fetch();
+   }
+
+/* public function __construct() {
+      if($id) setNextPrevId(); // constructor called after PDO fetch initializes $id.
+   } */
+
+   public function getPrev() {
+      $sentence = new TxtSentence;
+      if($this->prev_id > 0) {
+         $sentence->setById($this->prev_id);
+      }
+      return $sentence;
+   }
+
+   public function getNext() {
+      $sentence = new TxtSentence;
+      if($this->next_id) {
+         $sentence->setById($this->next_id);
       }
       return $sentence;
    }
@@ -58,7 +75,7 @@ class TxtSentence {
       $stmt->execute();
    }
 
-   public function appendGraphs() { //shit name -> appendGraphsFromDb
+   public function appendGraphsFromDb() {
       global $db;
       $qry= 'SELECT inscr_id, number_inscr, '
          . 'markup, punc, sentence_id, number_sentence, graph '
@@ -73,6 +90,7 @@ class TxtSentence {
       while($graph = $stmt->fetchObject('InscrGraph')) {
           $this->appendGraph($graph);
       }
+      return $this;
    }
 
    public function appendGraph(InscrGraph $graph) {
@@ -80,48 +98,29 @@ class TxtSentence {
       $graph->number_sentence = count($this->graphs) + 1;
       $this->graphs[] = $graph;
    }
-   
+
    public function setNextPrevId() {
-      $this->setNextId();
-      $this->setPrevId();
+      global $db;
+      for($offset = -1; $offset <= 1; $offset += 2){
+         $qry= 'SELECT id FROM txt_sentences ' 
+            . 'WHERE narrative_id=:narrative_id '
+            . 'AND number=:number;';
+         $stmt= $db->prepare($qry);
+         $stmt->bindValue(':narrative_id', $this->narrative_id);
+         $stmt->bindValue(':number', $this->number + $offset);
+         $stmt->execute();
+         $result = $stmt->fetch();
+         if(!$result) {
+            if($offset === 1) $this->next_id = 0;
+            else $this->prev_id = 0;
+         }
+         else {
+            if($offset === 1) $this->next_id = $result['id'];
+            else $this->prev_id = $result['id'];
+         }
+      }
    }
 
-   public function setNextId() {
-      global $db;
-      $qry= 'SELECT id FROM txt_sentences ' 
-         . 'WHERE narrative_id=:narrative_id '
-         . 'AND number=:number+1;';
-      $stmt= $db->prepare($qry);
-      $stmt->bindValue(':narrative_id', $this->narrative_id);
-      $stmt->bindValue(':number', $this->number);
-      $stmt->execute();
-      $result = $stmt->fetch();
-      if(!$result) {
-         $this->next_id = 0;
-      }
-      else {
-         $this->next_id = $result['id'];
-      }
-   }
-
-   public function setPrevId() {
-      global $db;
-      $qry= 'SELECT id FROM txt_sentences ' 
-         . 'WHERE narrative_id=:narrative_id '
-         . 'AND number=:number-1;';
-      $stmt= $db->prepare($qry);
-      $stmt->bindValue(':narrative_id', $this->narrative_id);
-      $stmt->bindValue(':number', $this->number);
-      $stmt->execute();
-      $result = $stmt->fetch();
-      if(!$result) {
-         $this->prev_id = 0;
-      }
-      else {
-         $this->prev_id = $result['id'];
-      }
-   }
-   
    public function getLength() {
       return count($this->graphs);
    }

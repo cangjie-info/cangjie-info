@@ -8,17 +8,14 @@ class TxtSubcollection {
 	public int $number;
 	public $narratives = array();
 
-	public static function getById($id) {
+	public function setById($id) {
 		global $db;
 		$qry = 'SELECT * FROM txt_subcollections WHERE id=:id;';
 		$stmt = $db->prepare($qry);
 		$stmt->bindValue(':id', $id); 
+		$stmt->setFetchMode(PDO::FETCH_INTO, $this);
 		$stmt->execute();
-		$subcollection = $stmt->fetchObject('TxtSubcollection');
-		if(!$subcollection) { // if no subcollection found for this id
-			exit('invalid id');
-		}
-		return $subcollection;
+		$stmt->fetch();
 	}
 
    public function insert() {
@@ -34,7 +31,7 @@ class TxtSubcollection {
       $this->id = $db->lastInsertId();
    }
 
-	public function appendNarratives() { 	
+	public function appendNarrativesFromDb() { 	
 		global $db;
 		$qry= 'SELECT * FROM txt_narratives '
 			. 'WHERE subcollection_id=:id '

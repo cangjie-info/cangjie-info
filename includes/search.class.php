@@ -5,8 +5,9 @@ class Search {
    public int $count = 0;
    public int $page = 1; // 1-indexed.
    public int $results_per_page = 10;
-   public $results = array();
+   public $sentences; // output of search
 
+   // retrieve all sentences (as TxtSentence objects) containing target graph
    public function doSearch() {
       global $db;
       $qry = 'SELECT COUNT(*) AS count FROM inscr_graphs '
@@ -15,9 +16,9 @@ class Search {
       $stmt->bindValue(':graph', $this->target_graph);
       $stmt->execute();
       $this->count = $stmt->fetch()['count'];
-      $qry = 'SELECT txt_sentences.id AS sentence_id, '
-         . 'txt_collections.short_name AS short_name, '
-         . 'inscr_graphs.number_sentence AS number_sentence '
+      $qry = 'SELECT txt_sentences.id AS id, txt_sentences.narrative_id AS narrative_id, '
+         . 'txt_collections.short_name AS short_name, txt_sentences.number AS number, '
+         . 'inscr_graphs.number_sentence AS target_graph_number '
          . 'FROM inscr_graphs '
          . 'JOIN txt_sentences ON txt_sentences.id = inscr_graphs.sentence_id '
          . 'JOIN txt_narratives ON txt_narratives.id = txt_sentences.narrative_id '
@@ -33,10 +34,10 @@ class Search {
       $stmt->bindValue(':row_count', $this->results_per_page, PDO::PARAM_INT);
       $stmt->bindValue(':offset', $this->results_per_page * ($this->page - 1), PDO::PARAM_INT);
       $stmt->execute();
-      while($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-         $result['sentence'] = TxtSentence::getById($result['sentence_id']);
-         $result['sentence']->appendGraphs();
-         $this->results[] = $result;
+      $this->sentences = $stmt->fetchAll(PDO::FETCH_CLASS, 'TxtSentence');
+      foreach($this->sentences as $sentence) {
+         $sentence->setNextPrevId();
+         $sentence->appendGraphsFromDb();
       }
    }
 }

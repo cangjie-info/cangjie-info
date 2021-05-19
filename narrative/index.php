@@ -8,8 +8,9 @@ require_once('../includes/inscr_graph.class.php');
 
 $id = getFilteredId();
   
-$narrative = TxtNarrative::getById($id);
-$narrative->appendSentencesGraphs();
+$narrative = new TxtNarrative;
+$narrative->setById($id);
+$narrative->appendSentencesGraphsFromDb();
 $narrative->setNextPrevId();
 
 require_once('../includes/all_html_top.html.php');

@@ -7,8 +7,9 @@ require_once('../includes/inscr_graph.class.php');
 
 $id = getFilteredId();
 
-$sentence = TxtSentence::getById($id);
-$sentence->appendGraphs();
+$sentence = new TxtSentence;
+$sentence->setById($id);
+$sentence->appendGraphsFromDb();
 $sentence->setNextPrevId();
 
 require_once('../includes/all_html_top.html.php');
