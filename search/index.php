@@ -19,7 +19,7 @@ if($action == 'search_form') {
 }
 
 if($action == 'search') {
-   $target = filter_input(INPUT_POST, 'graph', FILTER_SANITIZE_STRING);
+   $target = filter_input(INPUT_POST, 'target', FILTER_SANITIZE_STRING);
    $search = new Search;
    $page = filter_input(INPUT_POST, 'page', FILTER_VALIDATE_INT);
    if($page) {
@@ -28,7 +28,7 @@ if($action == 'search') {
    else {
       $page = 1;
    }
-   $search->target_graph = $target;
+   $search->target = $target;
    $search->doSearch();
    require_once('../includes/all_html_top.html.php');
    include('result.html.php');

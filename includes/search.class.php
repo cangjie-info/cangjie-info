@@ -1,7 +1,7 @@
 <?php
 
 class Search {
-   public string $target_graph = '';
+   public string $target = '';
    public int $count = 0;
    public int $page = 1; // 1-indexed.
    public int $results_per_page = 10;
@@ -13,7 +13,7 @@ class Search {
       $qry = 'SELECT COUNT(*) AS count FROM inscr_graphs '
          . 'WHERE graph = :graph;';
       $stmt = $db->prepare($qry);
-      $stmt->bindValue(':graph', $this->target_graph);
+      $stmt->bindValue(':graph', $this->target);
       $stmt->execute();
       $this->count = $stmt->fetch()['count'];
       $qry = 'SELECT txt_sentences.id AS id, txt_sentences.narrative_id AS narrative_id, '
@@ -30,7 +30,7 @@ class Search {
          . 'txt_sentences.number, inscr_graphs.number_sentence '
          . 'LIMIT :offset, :row_count;';
       $stmt = $db->prepare($qry);
-      $stmt->bindValue(':graph', $this->target_graph);
+      $stmt->bindValue(':graph', $this->target);
       $stmt->bindValue(':row_count', $this->results_per_page, PDO::PARAM_INT);
       $stmt->bindValue(':offset', $this->results_per_page * ($this->page - 1), PDO::PARAM_INT);
       $stmt->execute();
