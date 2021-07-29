@@ -14,5 +14,3 @@ foreach($collections as $collection){
 require_once('../includes/all_html_top.html.php');
 require_once('collections.html.php');
 require_once('../includes/all_html_bottom.html.php');
-
-?>

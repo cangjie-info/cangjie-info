@@ -43,6 +43,7 @@ if($action == 'edit') {
 
 // DISPLAY ACTION
 if($action == 'display'){
+        // TODO use get id function 
 	$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 	if($id === NULL){
 		$error_message = 'Need an integer id.';
@@ -100,4 +101,3 @@ if($action == 'display'){
 	require_once('../includes/all_html_bottom.html.php');
 	exit;
 }
-?>

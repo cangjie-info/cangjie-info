@@ -63,7 +63,7 @@ class TxtCollection {
       $stmt = $db->prepare($qry);
       $stmt->bindValue(':id', $this->id);
       $stmt->execute();
-      // delete subcontainers
+      // delete subcollections
       $qry = 'DELETE txt_subcollections '
          . 'FROM txt_subcollections '
          . 'INNER JOIN txt_collections ON txt_subcollections.collection_id = txt_collections.id '
@@ -71,7 +71,7 @@ class TxtCollection {
       $stmt = $db->prepare($qry);
       $stmt->bindValue(':id', $this->id);
       $stmt->execute();
-      // delete container
+      // delete collection
       $qry = 'DELETE FROM txt_collections WHERE txt_collections.id = :id;';
       $stmt = $db->prepare($qry);
       $stmt->bindValue(':id', $this->id);

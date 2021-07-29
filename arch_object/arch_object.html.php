@@ -32,10 +32,10 @@
 	<h3>
 		<a href='../inscr_surface/?id=<?php echo $surface['id'];?>'>
 Inscribed surface: <?php echo $surface['name']; ?></a>
-	</h3></a>
+	</h3>
 	<?php foreach($surface['inscrs'] as $inscr) { ?>
 		<h4>
-			<a href='../inscr/?id=<?php echo $inscr['id']; ?>'>Inscription: <?php echo $inscr['name']; ?>
+                    <a href='../inscr/?id=<?php echo $inscr['id']; ?>'>Inscription: <?php echo $inscr['name']; ?></a>
 		</h4>
-	<?php } ?>
-<?php } ?>
+	<?php }
+}
